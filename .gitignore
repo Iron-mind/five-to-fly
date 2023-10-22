@@ -128,3 +128,8 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+# Entorno virtual (por ejemplo, para entornos virtuales creados con virtualenv)
+venv/
+.venv/
+#Base de datos local
+db.sqlite3
