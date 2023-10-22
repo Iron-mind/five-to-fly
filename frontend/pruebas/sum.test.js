@@ -3,5 +3,5 @@
 const sum = require('../index');
 
 test('sums two numbers', () => {
-  expect(sum(1, 2)).toBe(3);
+  expect(sum(1, 3)).toBe(3);
 });
