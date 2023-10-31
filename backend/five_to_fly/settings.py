@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'five_to_fly.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-         'NAME': 'C:\\Users\\TRAVEL CENTER GROUP\\Desktop\\UV\\8 volume\\Desarrollo II\\five-to-fly\db\\five_to_fly_db.sqlite3'
+        'NAME': BASE_DIR / 'db' / 'five_to_fly_db.sqlite3'
     }
 }
 
