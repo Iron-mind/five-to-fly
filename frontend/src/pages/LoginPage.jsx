@@ -47,7 +47,7 @@ export const LoginPage = () => {
 				<div className='input-group'>
 					<input
 						type='email'
-						name='email'
+						name='emails'
 						id='email'
 						value={email}
 						onChange={onInputChange}
