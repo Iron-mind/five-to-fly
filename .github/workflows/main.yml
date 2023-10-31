@@ -23,10 +23,10 @@ jobs:
           python-version: 3.12.0
 
       - name: Build Docker Django Image
-        run: cd django && docker build -t my-django-app .
+        run: cd backend && docker build -t my-django-app .
 
       - name: Run Django models test
-        run: cd django && docker run my-django-app sh -c "python manage.py test"
+        run: cd backend && docker run my-django-app sh -c "python manage.py test"
 
       - name: Build Docker Frontend Image
         run: cd frontend && docker build -t my-react-app .
