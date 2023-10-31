@@ -1,4 +1,6 @@
-module.exports = {
+//jest.config.js
+
+export default {
     setupFilesAfterEnv: ["<rootDir>/src/setupTests.js"],
     testEnvironment: "jsdom",
     moduleNameMapper: {
@@ -7,5 +9,6 @@ module.exports = {
     transform: {
       "^.+\\.jsx?$": "babel-jest",
     },
+    testEnvironment: 'jest-environment-jsdom',
   };
   
