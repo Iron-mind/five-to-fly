@@ -32,7 +32,7 @@ jobs:
         run: cd frontend && docker build -t my-react-app .
 
       - name: Run Test
-        run: cd frontend && docker run my-react-app
+        run: cd frontend && docker run -d my-react-app
 
 
     
