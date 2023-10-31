@@ -4,6 +4,9 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
-RUN npm run start
-EXPOSE 3000
 
+#Ejecutamos un servidor web de producción directamente
+CMD npx serve -s build -l 3000
+
+# Exponemos el puerto
+EXPOSE 3000

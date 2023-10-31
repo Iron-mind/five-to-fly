@@ -5,8 +5,6 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     restart: always
-    depends_on:
-       - mystore_ms
     ports:
       - "3000:3000"
   backend:
