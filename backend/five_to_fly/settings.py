@@ -76,8 +76,14 @@ WSGI_APPLICATION = 'five_to_fly.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db' / 'five_to_fly_db.sqlite3'
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'five_to_fly_jrqw',
+        'USER': 'five_to_fly_jrqw_user',
+        'PASSWORD': 'sY5SPLaaPu0V8dgLlhGhEDfjDqFYgdnX',
+        'HOST': 'dpg-clbv93eg1b2c73eqb3pg-a.oregon-postgres.render.com',
+        'PORT': '5432'
+        #'django.db.backends.sqlite3',
+        #'NAME': BASE_DIR / 'db' / 'five_to_fly_db.sqlite3'
     }
 }
 
