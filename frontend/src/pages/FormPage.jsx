@@ -3,7 +3,10 @@ import { useForm } from 'react-hook-form';
 
 export const FormPage = () => {
     const { register, handleSubmit } = useForm()
-    const onSubmit = (data) => console.log(data)
+    const onSubmit = (data) => {
+        console.log(data)
+        compararLugaresTuristicos(respuesta, lugares)
+    }
 
     const [preguntas, setPreguntas] = useState([
         { id: 0, texto: 'Texto pregunta 1' },
@@ -23,6 +26,69 @@ export const FormPage = () => {
         { id: 14, texto: 'Texto pregunta 15' },
     ])
 
+    function calcularPuntuacionPonderada(respuesta, pesos) {
+        // Verificar si se proporcionan respuesta y pesos válidos
+        if (!respuesta || !pesos || !Array.isArray(pesos)) {
+            console.log("La respuesta o los pesos proporcionados no son válidos.");
+            return 0;
+        }
+    
+        // Obtener las preguntas presentes en la respuesta
+        const keys = Object.keys(respuesta);
+        
+        // Sumar los productos de la calificación y los pesos
+        const puntuacionTotal = keys.reduce((acumulador, pregunta) => {
+            console.log("respuesta[index]:", respuesta[pregunta])
+            console.log("keys:", keys)
+            console.log("index:", pregunta)
+            console.log("keys[index]:", keys[pregunta])
+
+            console.log("pesos[index]:", pesos[pregunta])
+
+            return acumulador + parseInt(respuesta[pregunta]) * parseInt(pesos[pregunta]);
+        }, 0);
+    
+        return puntuacionTotal;
+    }
+    
+    function compararLugaresTuristicos(respuesta, lugares) {
+        if (!respuesta || !lugares || !Array.isArray(lugares) || lugares.length < 2) {
+            console.log("Se necesitan al menos dos lugares para comparar.");
+            return;
+        }
+    
+        // Calcular la puntuación ponderada para cada lugar turístico
+        const puntuaciones = lugares.map((lugar) => {
+            return calcularPuntuacionPonderada(respuesta, lugar.pesos);
+        });
+        
+        console.log(puntuaciones)
+        // Encontrar el índice del lugar turístico con la puntuación más alta
+        const indiceMejorLugar = puntuaciones.indexOf(Math.max(...puntuaciones));
+    
+        // Mostrar el resultado
+        console.log(`El mejor lugar turístico es: ${lugares[indiceMejorLugar].nombre}`);
+    }
+    
+    // Ejemplo de uso con tres lugares turísticos
+    const lugares = [
+        {
+            nombre: "Lugar 1",
+            pesos: [3, 2, 3, 1, 2, 1, 3, 2, 1, 2, 3, 1, 2, 1, 3]
+        },
+        {
+            nombre: "Lugar 2",
+            pesos: [2, 1, 3, 2, 3, 1, 2, 1, 3, 1, 2, 2, 1, 3, 1]
+        },
+        {
+            nombre: "Lugar 3",
+            pesos: [3, 2, 1, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 2, 1]
+        }
+    ];
+    
+    // Respuesta a la pregunta
+    const respuesta = {1: '2', 2: '1', 3: '2', 4: '4', 6: '3', 8: '5', 9: '3', 10: '5', 11: '3', 14: '4'};
+    
     const [ShowQuestions, setShowQuestions] = useState([])
 
     //Genera un numero aleatorio
@@ -37,14 +103,14 @@ export const FormPage = () => {
             do {
                 number = getRandomInt(preguntas.length);
             } while (ShowQuestions.some(question => question.id === preguntas[number].id));
-    
+
             // Añade la pregunta aleatoria para mostrar
             setShowQuestions(prevQuestions => [...prevQuestions, preguntas[number]]);
 
             // Elimina la pregunta aleatoria del array original
             setPreguntas(prevPreguntas => prevPreguntas.filter((_, index) => index !== number));
         };
-    
+
         if (preguntas.length > 0 && ShowQuestions.length < 10) {
             agregarPreguntaAleatoria();
         }
