@@ -83,3 +83,8 @@ form {
 	justify-content: space-around;
 	text-align: center;
 }
+
+.imgs{
+	width: 1000px;
+	height: 500px;
+}
