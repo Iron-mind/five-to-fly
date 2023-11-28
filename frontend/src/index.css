@@ -65,7 +65,6 @@ nav a {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	height: 500px;
 }
 
 form {
@@ -80,4 +79,16 @@ form {
 	width: 100%;
 	margin: 10px 0;
 	text-align: center;
+}
+
+.input-group-row {
+	display: flex;
+	margin: 10px 0;
+	justify-content: space-around;
+	text-align: center;
+}
+
+.imgs{
+	width: 1000px;
+	height: 500px;
 }
