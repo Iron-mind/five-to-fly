@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
 import "../index.css";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 export function UserProfile({ id }) {
 	const [user, setUser] = useState({
 		nombre: "",
 		correo: "",
 		avatar: "",
+		updatedAt: "",
 		recommendedPlaces: [],
 	});
-
+	const userId = useParams().id;
+	const [updating, setUpdating] = useState(false);
+	const [submitting, setSubmitting] = useState(false);
 	useEffect(() => {
 		// Simulando una llamada a una API para obtener la información del usuario
 		// Aquí puedes realizar una llamada a tu backend o cargar la información de otra manera.
@@ -20,12 +24,13 @@ export function UserProfile({ id }) {
 				avatar: "url_de_la_imagen.jpg",
 				direccion: "",
 				ciudad: "",
+				updatedAt: "",
 				recommendedPlaces: ["Paris", "Tokyo", "New York"],
 			};
 
 			// Simulación de retardo en la llamada a la API
 			axios
-				.get("https://655fa07b879575426b45990a.mockapi.io/api/users/2")
+				.get("https://655fa07b879575426b45990a.mockapi.io/api/users/" + userId)
 
 				.then((res) => {
 					setUser({ ...userData, ...res.data });
@@ -43,6 +48,21 @@ export function UserProfile({ id }) {
 			...prevUser,
 			[name]: value,
 		}));
+		setUpdating(true);
+	};
+
+	const onSubmit = (e) => {
+		setSubmitting(true);
+
+		e.preventDefault();
+		axios
+			.put("https://655fa07b879575426b45990a.mockapi.io/api/users/" + userId, {
+				...user,
+			})
+			.then(({ data }) => {
+				setSubmitting(false);
+				setUpdating(false);
+			});
 	};
 
 	return (
@@ -53,31 +73,41 @@ export function UserProfile({ id }) {
 					alt="Profile Pic"
 					className="w-[200px] h-[200px] rounded-full mx-auto mb-4"
 				/>
-				<div className=" ">
-					<label className="font-bold" htmlFor="name">
+				<div className="mb-4">
+					<label
+						className="block text-gray-700 text-sm font-bold mb-2"
+						htmlFor="nombre"
+					>
 						Nombre:{" "}
 					</label>
 					<input
 						type="text"
-						name="name"
+						name="nombre"
 						value={user.nombre}
 						onChange={handleInputChange}
-						className="border-b-2 border-gray-500 focus:outline-none focus:border-blue-500"
+						className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 					/>
 				</div>
-
-				<div className="">
-					<label htmlFor="email">Email: </label>
+				<div className="mb-4 ">
+					<label
+						className="block text-gray-700 text-sm font-bold mb-2"
+						htmlFor="correo"
+					>
+						Email:{" "}
+					</label>
 					<input
 						type="text"
-						name="email"
+						name="correo"
 						value={user.correo}
 						onChange={handleInputChange}
-						className="border-b-2 border-gray-500 focus:outline-none focus:border-blue-500"
+						className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 					/>
 				</div>
-				<div className=" ">
-					<label className="font-bold" htmlFor="name">
+				<div className="mb-4 ">
+					<label
+						className="block text-gray-700 text-sm font-bold mb-2"
+						htmlFor="direccion"
+					>
 						Dirección:{" "}
 					</label>
 					<input
@@ -85,11 +115,14 @@ export function UserProfile({ id }) {
 						name="direccion"
 						value={user.direccion}
 						onChange={handleInputChange}
-						className="border-b-2 border-gray-500 focus:outline-none focus:border-blue-500"
+						className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 					/>
 				</div>
-				<div className=" ">
-					<label className="font-bold" htmlFor="name">
+				<div className="mb-4  ">
+					<label
+						className="block text-gray-700 text-sm font-bold mb-2"
+						htmlFor="ciudad"
+					>
 						Ciudad:{" "}
 					</label>
 					<input
@@ -97,9 +130,27 @@ export function UserProfile({ id }) {
 						name="ciudad"
 						value={user.ciudad}
 						onChange={handleInputChange}
-						className="border-b-2 border-gray-500 focus:outline-none focus:border-blue-500"
+						className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 					/>
 				</div>
+				{updating && (
+					<div className="text-center mt-4">
+						{submitting ? (
+							"Guardando..."
+						) : (
+							<button
+								onClick={onSubmit}
+								className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+							>
+								Actualizar
+							</button>
+						)}
+					</div>
+				)}
+				Ultima Actualización:{" "}
+				<span className="text-green-500">
+					{new Date(user.updatedAt).toLocaleString().substring(0, 17)}{" "}
+				</span>
 			</div>
 
 			<div className="mt-8">
