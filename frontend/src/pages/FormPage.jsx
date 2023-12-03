@@ -176,80 +176,53 @@ export const FormPage = () => {
 	}, []);
 
 	return (
-		<article className="wrapper">
-			{sumitted ? (
-				<div>
-					<h1>
-						¡Aquí esta tu ranking de los mejores lugares que te recomendamos
-						según tus respuestas!
-					</h1>
-					{topThree.map((lugar, index) => (
-						<div className="input-group" key={index}>
-							<img className="imgs" src={lugar.img} />
-							<h2>
-								{index + 1}. {lugar.name}
-							</h2>
-							<p>Puntuación: {lugar.score}</p>
-							<p>{lugar.description}</p>
-						</div>
-					))}
-				</div>
-			) : (
-				<form onSubmit={handleSubmit(onSubmit)}>
-					<h1>¡Encuentra tu sitio ideal!</h1>
-					<p>Responde nuestro cuestionario para saber tu sitio adicional.</p>
-					{ShowQuestions.map((pregunta) => (
-						<div className="input-group" key={pregunta.id}>
-							<label>{pregunta.texto}</label>
-							<br />
-							<div className="input-group-row">
-								<label>
-									<input
-										type="radio"
-										value={1}
-										{...register(`${pregunta.id}`, { required: true })}
-									/>
-									No
-								</label>
-								<label>
-									<input
-										type="radio"
-										value={2}
-										{...register(`${pregunta.id}`, { required: true })}
-									/>
-									Posiblemente no
-								</label>
-								<label>
-									<input
-										type="radio"
-										value={3}
-										{...register(`${pregunta.id}`, { required: true })}
-									/>
-									No me importa
-								</label>
-								<label>
-									<input
-										type="radio"
-										value={4}
-										{...register(`${pregunta.id}`, { required: true })}
-									/>
-									Posiblemente si
-								</label>
-								<label>
-									<input
-										type="radio"
-										value={5}
-										{...register(`${pregunta.id}`, { required: true })}
-									/>
-									Si
-								</label>
-							</div>
-						</div>
-					))}
-
-					<input type="submit" />
-				</form>
-			)}
-		</article>
+		<article className='flex flex-wrap mt-8 mx-auto bg-white justify-center rounded-t-lg sm:rounded-lg sm:w-2/4'>
+            {sumitted ?
+                <div className='p-8 flex justify-center flex-col'>
+                    <h1 className='flex justify-center text-2xl'>¡Aquí esta tu ranking de los mejores lugares que te recomendamos según tus respuestas!</h1>
+                    {topThree.map((lugar, index) => (
+                        <div className='mt-6' key={index}>
+                            <img className="w-[100%] rounded-lg" src={lugar.img} />
+                            <h2 className='flex justify-center pt-8 uppercase text-3xl font-bold'>{index + 1}. {lugar.name}</h2>
+                            <p className='flex justify-center text-2xl'>Puntuación: {lugar.score}</p>
+                            <p className='text-2xl'>{lugar.description}</p>
+                        </div>
+                    ))}
+                </div>
+                :
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <h1>¡Encuentra tu sitio ideal!</h1>
+                    <p>Responde nuestro cuestionario para saber tu sitio adicional.</p>
+                    {ShowQuestions.map(pregunta => (
+                        <div className='input-group' key={pregunta.id}>
+                            <label >{pregunta.texto}</label><br />
+                            <div className='input-group-row'>
+                                <label>
+                                    <input type="radio" value={1} {...register(`${pregunta.id}`, { required: true })} />
+                                    No
+                                </label>
+                                <label>
+                                    <input type="radio" value={2} {...register(`${pregunta.id}`, { required: true })} />
+                                    Posiblemente no
+                                </label>
+                                <label>
+                                    <input type="radio" value={3} {...register(`${pregunta.id}`, { required: true })} />
+                                    No me importa
+                                </label>
+                                <label>
+                                    <input type="radio" value={4} {...register(`${pregunta.id}`, { required: true })} />
+                                    Posiblemente si
+                                </label>
+                                <label>
+                                    <input type="radio" value={5} {...register(`${pregunta.id}`, { required: true })} />
+                                    Si
+                                </label>
+                            </div>
+                        </div>
+                    ))}
+                    <input type="submit" />
+                </form>
+            }
+        </article>
 	);
 };

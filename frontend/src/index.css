@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+#root {
+	background-image: linear-gradient(to top, var(--tw-gradient-stops));
+	--tw-gradient-from: #70348c var(--tw-gradient-from-position);
+    --tw-gradient-to: rgb(250 204 21 / 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+	--tw-gradient-to: #585ca4 var(--tw-gradient-to-position);
+}
+
 * {
 	margin: 0;
 	padding: 0;
@@ -14,36 +22,14 @@ body {
 	margin: 0 auto;
 }
 
-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
 
-	padding: 5px;
-	background-color: #697ec2;
-	color: #fff;
-}
 
-h1 a {
-	text-decoration: none;
-	color: #fff;
-}
-
-nav,
 .user {
 	display: flex;
 	align-items: center;
 	gap: 20px;
 }
 
-nav a {
-	text-decoration: none;
-	color: #fff;
-}
-
-.username {
-	color: #fff;
-}
 
 .btn-logout {
 	border: 1px solid #fff;
