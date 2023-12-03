@@ -16,9 +16,10 @@ export const AppRouter = () => {
 			<Routes>
 				<Route path="/" element={<Navbar />}>
 					<Route index element={<HomePage />} />
-					<Route path='login' element={<LoginPage />} />
-					<Route path='register' element={<RegisterPage />} />
-					<Route path='form' element={<FormPage />} />
+					<Route path="login" element={<LoginPage />} />
+					<Route path="register" element={<RegisterPage />} />
+					<Route path="form" element={<FormPage />} />
+					<Route path="profile/:id" element={<UserProfile />} />
 
 					<Route
 						path="dashboard"
@@ -28,7 +29,6 @@ export const AppRouter = () => {
 							</PrivateRoute>
 						}
 					/>
-					<Route path="profile/:id" element={<UserProfile />} />
 				</Route>
 			</Routes>
 		</>
