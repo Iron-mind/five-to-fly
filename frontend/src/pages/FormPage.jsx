@@ -1,52 +1,52 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import axios from "axios";
+
+const Lugares = [
+	{
+		name: "Cancún",
+		weights: [
+			2, 3, 1, 2, 3, 3, 2, 1, 2, 1, 1, 3, 3, 1, 1, 2, 3, 3, 1, 1, 2, 1, 1, 2, 1,
+			3, 2, 2, 2, 2,
+		],
+		img: "https://cdn.vallarta-adventures.com/sites/default/files/2019-01/cancun-about-weather%20%281%29.jpg",
+		description: "Descripción 1",
+	},
+	{
+		name: "Tokyo",
+		weights: [
+			2, 1, 2, 3, 1, 1, 2, 3, 1, 3, 3, 1, 1, 2, 1, 3, 2, 1, 3, 1, 2, 1, 2, 1, 3,
+			2, 2, 2, 2, 1,
+		],
+		img: "https://media.cntraveler.com/photos/60341fbad7bd3b27823c9db2/4:3/w_4624,h_3468,c_limit/Tokyo-2021-GettyImages-1208124099.jpg",
+		description: "Descripción 2",
+	},
+	{
+		name: "Marruecos",
+		weights: [
+			3, 2, 3, 1, 3, 3, 2, 1, 2, 1, 1, 3, 3, 2, 2, 3, 1, 2, 1, 3, 2, 3, 2, 3, 1,
+			2, 3, 3, 3, 3,
+		],
+		img: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/29/fb/25/a5/caption.jpg?w=700&h=-1&s=1",
+		description: "Descripción 3",
+	},
+];
+async function guardarPreguntas() {
+	let i = 0;
+	while (i < Lugares.length) {
+		// alert(Lugares[i].weights.length);
+		await axios.post("https://656cb651e1e03bfd572eab2d.mockapi.io/api/cities", {
+			...Lugares[i],
+		});
+		i++;
+	}
+}
 
 export const FormPage = () => {
     const { register, handleSubmit } = useForm()
     const [ShowQuestions, setShowQuestions] = useState([])
     const [sumitted, setSumitted] = useState(false)
     const [topThree, setTopThree] = useState([])
-
-    //se borrara esto, se cambiara por los datos traidos del backend
-    const [preguntas, setPreguntas] = useState([
-        { id: 0, texto: 'Texto pregunta 1' },
-        { id: 1, texto: 'Texto pregunta 2' },
-        { id: 2, texto: 'Texto pregunta 3' },
-        { id: 3, texto: 'Texto pregunta 4' },
-        { id: 4, texto: 'Texto pregunta 5' },
-        { id: 5, texto: 'Texto pregunta 6' },
-        { id: 6, texto: 'Texto pregunta 7' },
-        { id: 7, texto: 'Texto pregunta 8' },
-        { id: 8, texto: 'Texto pregunta 9' },
-        { id: 9, texto: 'Texto pregunta 10' },
-        { id: 10, texto: 'Texto pregunta 11' },
-        { id: 11, texto: 'Texto pregunta 12' },
-        { id: 12, texto: 'Texto pregunta 13' },
-        { id: 13, texto: 'Texto pregunta 14' },
-        { id: 14, texto: 'Texto pregunta 15' },
-    ])
-
-    // Los lugares turisticos, toca llenar todo esto, no se si se traeran del backend
-    const lugares = [
-        {
-            name: "Cancún",
-            weights: [3, 2, 3, 1, 2, 1, 3, 2, 1, 2, 3, 1, 2, 1, 3],
-            img: "https://cdn.vallarta-adventures.com/sites/default/files/2019-01/cancun-about-weather%20%281%29.jpg",
-            description: "Descripción 1"
-        },
-        {
-            name: "Tokyo",
-            weights: [2, 1, 3, 2, 3, 1, 2, 1, 3, 1, 2, 2, 1, 3, 1],
-            img: "https://media.cntraveler.com/photos/60341fbad7bd3b27823c9db2/4:3/w_4624,h_3468,c_limit/Tokyo-2021-GettyImages-1208124099.jpg",
-            description: "Descripción 2"
-        },
-        {
-            name: "Marruecos",
-            weights: [3, 2, 1, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 2, 1],
-            img: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/29/fb/25/a5/caption.jpg?w=700&h=-1&s=1",
-            description: "Descripción 3"
-        }
-    ];
 
     //funcion que se activa cuando se manda el formulario
     const onSubmit = (data) => {
@@ -131,6 +131,28 @@ export const FormPage = () => {
         }
     }, [topThree]);
 
+    useEffect(() => {
+		async function fetchData() {
+			let { data } = await axios.get(
+				"https://656bebe7e1e03bfd572de71f.mockapi.io/api/questions"
+			);
+			let questions = data.map((q, ind) => {
+				return {
+					texto: q.texto,
+					id: ind,
+				};
+			});
+			let res = await axios.get(
+				"https://656cb651e1e03bfd572eab2d.mockapi.io/api/cities"
+			);
+			let cities = res.data;
+			// alert(JSON.stringify(cities));
+			setLugares(cities);
+			setPreguntas(questions);
+		}
+		fetchData();
+	}, []);
+  
     return (
         <article className='flex flex-wrap mt-8 mx-auto bg-white justify-center rounded-t-xl sm:rounded-xl sm:w-2/4'>
             {sumitted ?
@@ -180,5 +202,5 @@ export const FormPage = () => {
                 </form>
             }
         </article>
-    )
-}
+	);
+};
