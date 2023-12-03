@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import "../index.css";
+
 import axios from "axios";
 import { useParams } from "react-router-dom";
-export function UserProfile({ id }) {
+export function UserProfile() {
 	const [user, setUser] = useState({
 		nombre: "",
 		correo: "",

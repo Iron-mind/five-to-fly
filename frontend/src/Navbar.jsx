@@ -24,7 +24,7 @@ export const Navbar = () => {
 					<img
 						width={50}
 						height={50}
-						src="imgs/five-to-fly.ico"
+						src="https://ideogram.ai/api/images/direct/OKeVOFbqTSKJLZ-FVqaKUA.jpg"
 						alt="five to fly logo"
 					/>
 				</div>
