@@ -132,51 +132,51 @@ export const FormPage = () => {
     }, [topThree]);
 
     return (
-        <article className='flex flex-wrap mt-8 mx-auto bg-white justify-center rounded-t-lg sm:rounded-lg sm:w-2/4'>
+        <article className='flex flex-wrap mt-8 mx-auto bg-white justify-center rounded-t-xl sm:rounded-xl sm:w-2/4'>
             {sumitted ?
                 <div className='p-8 flex justify-center flex-col'>
-                    <h1 className='flex justify-center text-2xl'>¡Aquí esta tu ranking de los mejores lugares que te recomendamos según tus respuestas!</h1>
+                    <h1 className='flex justify-center text-3xl font-bold'>¡Aquí esta tu ranking de los mejores lugares que te recomendamos según tus respuestas!</h1>
                     {topThree.map((lugar, index) => (
                         <div className='mt-6' key={index}>
-                            <img className="w-[100%] rounded-lg" src={lugar.img} />
+                            <img className="w-[100%] rounded-xl" src={lugar.img} />
                             <h2 className='flex justify-center pt-8 uppercase text-3xl font-bold'>{index + 1}. {lugar.name}</h2>
-                            <p className='flex justify-center text-2xl'>Puntuación: {lugar.score}</p>
-                            <p className='text-2xl'>{lugar.description}</p>
+                            <p className='flex justify-center text-xl'>Puntuación: {lugar.score}</p>
+                            <p className='text-xl'>{lugar.description}</p>
                         </div>
                     ))}
                 </div>
                 :
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <h1>¡Encuentra tu sitio ideal!</h1>
-                    <p>Responde nuestro cuestionario para saber tu sitio adicional.</p>
-                    {ShowQuestions.map(pregunta => (
-                        <div className='input-group' key={pregunta.id}>
-                            <label >{pregunta.texto}</label><br />
-                            <div className='input-group-row'>
-                                <label>
-                                    <input type="radio" value={1} {...register(`${pregunta.id}`, { required: true })} />
+                <form onSubmit={handleSubmit(onSubmit)} className='p-8 flex justify-center flex-col xl:w-[100%]'>
+                    <h1 className='flex justify-center text-3xl font-bold border-b-2'>¡Encuentra tu sitio ideal!</h1>
+                    <p h1 className='flex justify-center text-xl py-2 mb-8'>Responde nuestro cuestionario para saber tu proximo lugar turistico.</p>
+                    {ShowQuestions.map((pregunta,index) => (
+                        <div key={pregunta.id} className='w-[100%] pt-8'>
+                            <label className='flex justify-start font-medium text-xl xl:text-3xl xl:font-normal'>{index + 1}. {pregunta.texto}</label>
+                            <div className='flex flex-col items-start py-2 px-4 xl:flex-row xl:justify-around xl:text-xl xl:py-4'>
+                                <label className='my-1 w-[100%] xl:w-auto'> 
+                                    <input className="w-5 h-5" type="radio" value={1} {...register(`${pregunta.id}`, { required: true })}/>
                                     No
                                 </label>
-                                <label>
-                                    <input type="radio" value={2} {...register(`${pregunta.id}`, { required: true })} />
+                                <label className='my-1 w-[100%] xl:w-auto'>
+                                    <input className="w-5 h-5" type="radio" value={2} {...register(`${pregunta.id}`, { required: true })} />
                                     Posiblemente no
                                 </label>
-                                <label>
-                                    <input type="radio" value={3} {...register(`${pregunta.id}`, { required: true })} />
-                                    No me importa
+                                <label className='my-1 w-[100%] xl:w-auto'>
+                                    <input className="w-5 h-5" type="radio" value={3} {...register(`${pregunta.id}`, { required: true })} />
+                                    No es revelevante
                                 </label>
-                                <label>
-                                    <input type="radio" value={4} {...register(`${pregunta.id}`, { required: true })} />
+                                <label className='my-1 w-[100%] xl:w-auto'>
+                                    <input className="w-5 h-5" type="radio" value={4} {...register(`${pregunta.id}`, { required: true })} />
                                     Posiblemente si
                                 </label>
-                                <label>
-                                    <input type="radio" value={5} {...register(`${pregunta.id}`, { required: true })} />
+                                <label className='my-1 w-[100%] xl:w-auto'>
+                                    <input className="w-5 h-5" type="radio" value={5} {...register(`${pregunta.id}`, { required: true })} />
                                     Si
                                 </label>
                             </div>
                         </div>
                     ))}
-                    <input type="submit" />
+                    <button type="submit" className='py-4 px-8 bg-[#585ca4] hover:bg-[#70348c] rounded-xl text-white text-xl flex items-center  shadow-xl w-[100%] mt-4 justify-center '>Enviar</button>
                 </form>
             }
         </article>
