@@ -19,7 +19,6 @@ export const AppRouter = () => {
 					<Route path='login' element={<LoginPage />} />
 					<Route path='register' element={<RegisterPage />} />
 					<Route path='form' element={<FormPage />} />
-
 					<Route
 						path="dashboard"
 						element={
