@@ -43,117 +43,95 @@ async function guardarPreguntas() {
 }
 
 export const FormPage = () => {
-	const { register, handleSubmit } = useForm();
-	const [ShowQuestions, setShowQuestions] = useState([]);
-	const [sumitted, setSumitted] = useState(false);
-	const [topThree, setTopThree] = useState([]);
+    const { register, handleSubmit } = useForm()
+    const [ShowQuestions, setShowQuestions] = useState([])
+    const [sumitted, setSumitted] = useState(false)
+    const [topThree, setTopThree] = useState([])
 
-	//se borrara esto, se cambiara por los datos traidos del backend
-	//endpoint https://656bebe7e1e03bfd572de71f.mockapi.io/api/questions
-	const [preguntas, setPreguntas] = useState([]);
+    //funcion que se activa cuando se manda el formulario
+    const onSubmit = (data) => {
+        console.log(data)
+        compararLugaresTuristicos(data, lugares)
+    }
 
-	// Los lugares turisticos, toca llenar todo esto, no se si se traeran del backend
-	// endpoint https://656cb651e1e03bfd572eab2d.mockapi.io/api/cities
-	const [lugares, setLugares] = useState([]);
+    //calculo las puntuaciones de cada lugar con sus respectivos pesos
+    function calcularPuntuacionPonderada(respuesta, weights) {
+        // Verificar si se proporcionan respuesta y pesos válidos
+        if (!respuesta || !weights || !Array.isArray(weights)) {
+            console.log("La respuesta o los pesos proporcionados no son válidos.");
+            return 0;
+        }
 
-	//funcion que se activa cuando se manda el formulario
-	const onSubmit = (data) => {
-		console.log(data);
-		compararLugaresTuristicos(data, lugares);
-	};
+        // Obtener las preguntas presentes en la respuesta
+        const keys = Object.keys(respuesta);
 
-	//calculo las puntuaciones de cada lugar con sus respectivos pesos
-	function calcularPuntuacionPonderada(respuesta, weights) {
-		// Verificar si se proporcionan respuesta y pesos válidos
-		if (!respuesta || !weights || !Array.isArray(weights)) {
-			console.log("La respuesta o los pesos proporcionados no son válidos.");
-			return 0;
-		}
+        // Sumar los productos de la calificación y los pesos
+        const puntuacionTotal = keys.reduce((acumulador, pregunta) => {
+            return acumulador + parseInt(respuesta[pregunta]) * parseInt(weights[pregunta]);
+        }, 0);
 
-		// Obtener las preguntas presentes en la respuesta
-		const keys = Object.keys(respuesta);
+        return puntuacionTotal;
+    }
 
-		// Sumar los productos de la calificación y los pesos
-		const puntuacionTotal = keys.reduce((acumulador, pregunta) => {
-			return (
-				acumulador + parseInt(respuesta[pregunta]) * parseInt(weights[pregunta])
-			);
-		}, 0);
+    //Compara los lugares con las respuestas generadas y los ordena de mayor a menor puntuacion, entregando solo 3 lugares
+    function compararLugaresTuristicos(respuesta, lugares) {
+        if (!respuesta || !lugares || !Array.isArray(lugares) || lugares.length < 2) {
+            console.log("Se necesitan al menos dos lugares para comparar.");
+            return;
+        }
 
-		return puntuacionTotal;
-	}
+        // Calcular la puntuación ponderada para cada lugar turístico
+        const puntuaciones = lugares.map((lugar) => {
+            return {
+                name: lugar.name,
+                score: calcularPuntuacionPonderada(respuesta, lugar.weights),
+                img: lugar.img,
+                description: lugar.description
+            };
+        });
 
-	//Compara los lugares con las respuestas generadas y los ordena de mayor a menor puntuacion, entregando solo 3 lugares
-	function compararLugaresTuristicos(respuesta, lugares) {
-		if (
-			!respuesta ||
-			!lugares ||
-			!Array.isArray(lugares) ||
-			lugares.length < 2
-		) {
-			console.log("Se necesitan al menos dos lugares para comparar.");
-			return;
-		}
+        // Ordenar los lugares por puntuación de mayor a menor
+        const lugaresOrdenados = puntuaciones.sort((a, b) => b.score - a.score);
+        lugaresOrdenados.slice(0, 3)
+        // Mostrar los tres mejores lugares
+        console.log(lugaresOrdenados)
+        setTopThree(lugaresOrdenados)
+    }
 
-		// Calcular la puntuación ponderada para cada lugar turístico
-		const puntuaciones = lugares.map((lugar) => {
-			return {
-				name: lugar.name,
-				score: calcularPuntuacionPonderada(respuesta, lugar.weights),
-				img: lugar.img,
-				description: lugar.description,
-			};
-		});
+    //Genera un numero aleatorio
+    function getRandomInt(max) {
+        return Math.floor(Math.random() * max);
+    }
 
-		// Ordenar los lugares por puntuación de mayor a menor
-		const lugaresOrdenados = puntuaciones.sort((a, b) => b.score - a.score);
-		lugaresOrdenados.slice(0, 3);
-		// Mostrar los tres mejores lugares
-		console.log(lugaresOrdenados);
-		setTopThree(lugaresOrdenados);
-	}
+    //useEffect para organizar las preguntas de forma aleatoria
+    useEffect(() => {
+        const agregarPreguntaAleatoria = () => {
+            let number;
+            // Confirmacion para que no se repite numeros (por si acaso)
+            do {
+                number = getRandomInt(preguntas.length);
+            } while (ShowQuestions.some(question => question.id === preguntas[number].id));
 
-	//Genera un numero aleatorio
-	function getRandomInt(max) {
-		return Math.floor(Math.random() * max);
-	}
+            // Añade la pregunta aleatoria para mostrar
+            setShowQuestions(prevQuestions => [...prevQuestions, preguntas[number]]);
 
-	//useEffect para organizar las preguntas de forma aleatoria
-	useEffect(() => {
-		const agregarPreguntaAleatoria = () => {
-			let number;
-			// Confirmacion para que no se repite numeros (por si acaso)
-			do {
-				number = getRandomInt(preguntas.length);
-			} while (
-				ShowQuestions.some((question) => question.id === preguntas[number].id)
-			);
+            // Elimina la pregunta aleatoria del array original
+            setPreguntas(prevPreguntas => prevPreguntas.filter((_, index) => index !== number));
+        };
 
-			// Añade la pregunta aleatoria para mostrar
-			setShowQuestions((prevQuestions) => [
-				...prevQuestions,
-				preguntas[number],
-			]);
+        if (preguntas.length > 0 && ShowQuestions.length < 10) {
+            agregarPreguntaAleatoria();
+        }
+    }, [preguntas, ShowQuestions]);
 
-			// Elimina la pregunta aleatoria del array original
-			setPreguntas((prevPreguntas) =>
-				prevPreguntas.filter((_, index) => index !== number)
-			);
-		};
+    //useEffect para ver las respuestas
+    useEffect(() => {
+        if (topThree.length !== 0) {
+            setSumitted(true)
+        }
+    }, [topThree]);
 
-		if (preguntas.length > 0 && ShowQuestions.length < 10) {
-			agregarPreguntaAleatoria();
-		}
-	}, [preguntas, ShowQuestions]);
-
-	//useEffect para ver las respuestas
-	useEffect(() => {
-		if (topThree.length !== 0) {
-			setSumitted(true);
-		}
-	}, [topThree]);
-
-	useEffect(() => {
+    useEffect(() => {
 		async function fetchData() {
 			let { data } = await axios.get(
 				"https://656bebe7e1e03bfd572de71f.mockapi.io/api/questions"
@@ -174,53 +152,53 @@ export const FormPage = () => {
 		}
 		fetchData();
 	}, []);
-
-	return (
-		<article className='flex flex-wrap mt-8 mx-auto bg-white justify-center rounded-t-lg sm:rounded-lg sm:w-2/4'>
+  
+    return (
+        <article className='flex flex-wrap mt-8 mx-auto bg-white justify-center rounded-t-xl sm:rounded-xl sm:w-2/4'>
             {sumitted ?
                 <div className='p-8 flex justify-center flex-col'>
-                    <h1 className='flex justify-center text-2xl'>¡Aquí esta tu ranking de los mejores lugares que te recomendamos según tus respuestas!</h1>
+                    <h1 className='flex justify-center text-3xl font-bold'>¡Aquí esta tu ranking de los mejores lugares que te recomendamos según tus respuestas!</h1>
                     {topThree.map((lugar, index) => (
                         <div className='mt-6' key={index}>
-                            <img className="w-[100%] rounded-lg" src={lugar.img} />
+                            <img className="w-[100%] rounded-xl" src={lugar.img} />
                             <h2 className='flex justify-center pt-8 uppercase text-3xl font-bold'>{index + 1}. {lugar.name}</h2>
-                            <p className='flex justify-center text-2xl'>Puntuación: {lugar.score}</p>
-                            <p className='text-2xl'>{lugar.description}</p>
+                            <p className='flex justify-center text-xl'>Puntuación: {lugar.score}</p>
+                            <p className='text-xl'>{lugar.description}</p>
                         </div>
                     ))}
                 </div>
                 :
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <h1>¡Encuentra tu sitio ideal!</h1>
-                    <p>Responde nuestro cuestionario para saber tu sitio adicional.</p>
-                    {ShowQuestions.map(pregunta => (
-                        <div className='input-group' key={pregunta.id}>
-                            <label >{pregunta.texto}</label><br />
-                            <div className='input-group-row'>
-                                <label>
-                                    <input type="radio" value={1} {...register(`${pregunta.id}`, { required: true })} />
+                <form onSubmit={handleSubmit(onSubmit)} className='p-8 flex justify-center flex-col xl:w-[100%]'>
+                    <h1 className='flex justify-center text-3xl font-bold border-b-2'>¡Encuentra tu sitio ideal!</h1>
+                    <p h1 className='flex justify-center text-xl py-2 mb-8'>Responde nuestro cuestionario para saber tu proximo lugar turistico.</p>
+                    {ShowQuestions.map((pregunta,index) => (
+                        <div key={pregunta.id} className='w-[100%] pt-8'>
+                            <label className='flex justify-start font-medium text-xl xl:text-3xl xl:font-normal'>{index + 1}. {pregunta.texto}</label>
+                            <div className='flex flex-col items-start py-2 px-4 xl:flex-row xl:justify-around xl:text-xl xl:py-4'>
+                                <label className='my-1 w-[100%] xl:w-auto'> 
+                                    <input className="w-5 h-5" type="radio" value={1} {...register(`${pregunta.id}`, { required: true })}/>
                                     No
                                 </label>
-                                <label>
-                                    <input type="radio" value={2} {...register(`${pregunta.id}`, { required: true })} />
+                                <label className='my-1 w-[100%] xl:w-auto'>
+                                    <input className="w-5 h-5" type="radio" value={2} {...register(`${pregunta.id}`, { required: true })} />
                                     Posiblemente no
                                 </label>
-                                <label>
-                                    <input type="radio" value={3} {...register(`${pregunta.id}`, { required: true })} />
-                                    No me importa
+                                <label className='my-1 w-[100%] xl:w-auto'>
+                                    <input className="w-5 h-5" type="radio" value={3} {...register(`${pregunta.id}`, { required: true })} />
+                                    No es revelevante
                                 </label>
-                                <label>
-                                    <input type="radio" value={4} {...register(`${pregunta.id}`, { required: true })} />
+                                <label className='my-1 w-[100%] xl:w-auto'>
+                                    <input className="w-5 h-5" type="radio" value={4} {...register(`${pregunta.id}`, { required: true })} />
                                     Posiblemente si
                                 </label>
-                                <label>
-                                    <input type="radio" value={5} {...register(`${pregunta.id}`, { required: true })} />
+                                <label className='my-1 w-[100%] xl:w-auto'>
+                                    <input className="w-5 h-5" type="radio" value={5} {...register(`${pregunta.id}`, { required: true })} />
                                     Si
                                 </label>
                             </div>
                         </div>
                     ))}
-                    <input type="submit" />
+                    <button type="submit" className='py-4 px-8 bg-[#585ca4] hover:bg-[#70348c] rounded-xl text-white text-xl flex items-center  shadow-xl w-[100%] mt-4 justify-center '>Enviar</button>
                 </form>
             }
         </article>

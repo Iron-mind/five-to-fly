@@ -42,8 +42,8 @@ export const Navbar = () => {
 					</div>
 				) : (
 					<nav className='flex justify-around w-[100%] mb-4 mt-2 sm:my-0 sm:w-auto'>
-						<Link to="/login" className='p-3 text-xl bg-[#585ca4] hover:bg-[#70348c] rounded-lg text-white flex items-center sm:bg-white sm:text-gray-800 sm:hover:text-white sm:hover:rounded-lg mr-4'><button >Iniciar sesión</button></Link>
-						<Link to="/register" className='p-3 bg-[#585ca4] hover:bg-[#70348c] rounded-lg text-white text-xl flex items-center sm:mr-8'><button>Registrarse</button></Link>
+						<Link to="/register" className='p-3 text-xl bg-[#585ca4] hover:bg-[#70348c] rounded-lg text-white flex items-center sm:bg-white sm:text-gray-800 sm:hover:text-white sm:hover:rounded-lg mr-4 sm:hover:shadow-xl'><button >Registrarse</button></Link>
+						<Link to="/login" className='p-3 bg-[#585ca4] hover:bg-[#70348c] rounded-lg text-white text-xl flex items-center sm:mr-8 shadow-xl'><button>Iniciar sesión</button></Link>
 					</nav>
 				)}
 			</header>
