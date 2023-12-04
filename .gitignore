@@ -133,3 +133,5 @@ venv/
 .venv/
 #Base de datos local
 db.sqlite3
+#Pycache
+   **/__pycache__/
