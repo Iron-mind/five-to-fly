@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'usuarios',
-    'Questions',
+    'Questions_',
 ]
 
 MIDDLEWARE = [
@@ -84,8 +84,6 @@ DATABASES = {
         'PASSWORD': 'sY5SPLaaPu0V8dgLlhGhEDfjDqFYgdnX',
         'HOST': 'dpg-clbv93eg1b2c73eqb3pg-a.oregon-postgres.render.com',
         'PORT': '5432'
-        #'django.db.backends.sqlite3',
-        #'NAME': BASE_DIR / 'db' / 'five_to_fly_db.sqlite3'
     }
 }
 
