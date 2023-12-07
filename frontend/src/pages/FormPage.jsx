@@ -47,7 +47,8 @@ export const FormPage = () => {
     const [ShowQuestions, setShowQuestions] = useState([])
     const [sumitted, setSumitted] = useState(false)
     const [topThree, setTopThree] = useState([])
-
+    const [lugares, setLugares] = useState([]);
+		const [preguntas, setPreguntas] = useState([]);
     //funcion que se activa cuando se manda el formulario
     const onSubmit = (data) => {
         console.log(data)
