@@ -5,7 +5,7 @@ from django.db import models
 class UserProfile(AbstractUser):
    USERNAME_FIELD = 'correo'
    correo = models.EmailField(unique=True)
-   celular = models.CharField(max_length=15)
+   celular = models.CharField(max_length=15, null=True, blank=True)
    direccion = models.CharField(max_length=255, null=True, blank=True)
    ciudad = models.CharField(max_length=100, null=True, blank=True)
    
