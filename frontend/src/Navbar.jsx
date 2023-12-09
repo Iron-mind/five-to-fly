@@ -34,9 +34,8 @@ export const Navbar = () => {
 				</div>
 
 				{state?.logged ? (
-					<div className="user">
-						<span className="username">{state?.name}</span>
-						<button className="btn-logout" onClick={onLogout}>
+					<div className="">
+						<button className='p-3 text-xl bg-[#585ca4] hover:bg-[#70348c] rounded-lg text-white flex items-center mb-2 sm:bg-white sm:text-gray-800 sm:hover:text-white sm:hover:rounded-lg mr-4 sm:hover:shadow-xl sm:mb-0' onClick={onLogout}>
 							Cerrar sesión
 						</button>
 					</div>

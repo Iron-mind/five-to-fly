@@ -1,12 +1,11 @@
-version: "3"
+version: '3.4'
 services:
-  frontend:
+  vite_docker:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    restart: always
     ports:
-      - "3000:3000"
+      - 5173:5173
   backend:
     build:
       context: ./backend
@@ -35,5 +34,4 @@ services:
       - postgres-data:/var/lib/postgresql/data
 
 volumes:
-  postgres-data:
-
+ postgres-data:

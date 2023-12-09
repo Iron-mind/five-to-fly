@@ -6,13 +6,19 @@ export const LoginPage = () => {
 	const navigate = useNavigate();
 	const { register, handleSubmit } = useForm()
 
-	//funcion que se activa cuando se manda el formulario
+	//función que se activa cuando se manda el formulario
     const onSubmit = async (data) => {
         console.log(data)
 		try {
 			// Realiza la solicitud POST utilizando Axios
-			const response = await axios.post('URL_DEL_BACKEND', data);
-			console.log('Respuesta del servidor:', response.data);
+			//const response = await axios.post('URL_DEL_BACKEND', data);
+			//console.log('Respuesta del servidor:', response.data);
+			navigate('/form', {
+				replace: true,
+				state: {
+					logged: true,
+				},
+			});
 			// Puedes realizar acciones adicionales según la respuesta del servidor
 		} catch (error) {
 			console.error('Error al enviar el formulario:', error);
