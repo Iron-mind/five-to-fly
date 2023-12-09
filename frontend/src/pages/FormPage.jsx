@@ -135,7 +135,7 @@ export const FormPage = () => {
     useEffect(() => {
 		async function fetchData() {
 			let { data } = await axios.get(
-				"https://656bebe7e1e03bfd572de71f.mockapi.io/api/questions"
+				"http://localhost:4000/questions/api/questions/"
 			);
 			let questions = data.map((q, ind) => {
 				return {

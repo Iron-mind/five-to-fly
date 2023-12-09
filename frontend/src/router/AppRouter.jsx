@@ -17,8 +17,15 @@ export const AppRouter = () => {
 					<Route index element={<HomePage />} />
 					<Route path="login" element={<LoginPage />} />
 					<Route path="register" element={<RegisterPage />} />
-					<Route path="profile/:id" element={<UserProfile />} />
 
+
+					<Route
+						path="profile/:id"
+						element={
+							<PrivateRoute>
+								<UserProfile />
+							</PrivateRoute>}
+					/>
 					<Route
 						path="form"
 						element={

@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 # Create your models here.
 class UserProfile(models.Model):
@@ -11,3 +12,15 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.nombre
+    
+
+class Questions(models.Model):
+    texto = models.CharField(max_length=200)
+    # Agrega más campos según sea necesario
+
+class Places(models.Model):
+    name = models.CharField(max_length=100)
+    img = models.URLField(max_length=500)
+    description = description = models.CharField(max_length=1000)
+    weights = ArrayField(models.IntegerField())
+    # Agrega más campos según sea necesario
