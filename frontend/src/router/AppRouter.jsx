@@ -2,7 +2,6 @@ import { Route, Routes } from 'react-router-dom';
 import { Navbar } from '../Navbar';
 import {
 	HomePage,
-	DashboardPage,
 	LoginPage,
 	RegisterPage,
 	FormPage
@@ -18,14 +17,13 @@ export const AppRouter = () => {
 					<Route index element={<HomePage />} />
 					<Route path="login" element={<LoginPage />} />
 					<Route path="register" element={<RegisterPage />} />
-					<Route path="form" element={<FormPage />} />
 					<Route path="profile/:id" element={<UserProfile />} />
 
 					<Route
-						path="dashboard"
+						path="form"
 						element={
 							<PrivateRoute>
-								<DashboardPage />
+								<FormPage />
 							</PrivateRoute>
 						}
 					/>
