@@ -8,6 +8,7 @@ import {
 } from '../pages';
 import { PrivateRoute } from './PrivateRoute';
 import { UserProfile } from "../pages/Profile";
+import { EvaluateResult } from "../pages/evaluateResult";
 
 export const AppRouter = () => {
 	return (
@@ -16,7 +17,7 @@ export const AppRouter = () => {
 				<Route index element={<HomePage />} />
 				<Route path="login" element={<LoginPage />} />
 				<Route path="register" element={<RegisterPage />} />
-
+				<Route path="evaluate-result" element={<EvaluateResult />} />
 
 				<Route
 					path="profile/:id"

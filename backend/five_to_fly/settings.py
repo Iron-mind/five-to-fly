@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework.authtoken',
     'usuarios',
     'rest_framework',
     "corsheaders",
@@ -134,3 +136,6 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://localhost:5432",
 ]
+
+AUTH_USER_MODEL = 'usuarios.UserProfile'
+AUTH_GROUP_MODEL = 'usuarios.Role'
