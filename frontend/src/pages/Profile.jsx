@@ -1,89 +1,65 @@
-import { useEffect, useState } from "react";
-
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../Context/ContextUser";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+
 export function UserProfile() {
-	const [user, setUser] = useState({
-		nombre: "",
-		correo: "",
-		avatar: "",
-		updatedAt: "",
-		recommendedPlaces: [],
-	});
-	const userId = useParams().id;
+	const { user, login } = useContext(AuthContext)
 	const [updating, setUpdating] = useState(false);
 	const [submitting, setSubmitting] = useState(false);
-	useEffect(() => {
-		// Simulando una llamada a una API para obtener la información del usuario
-		// Aquí puedes realizar una llamada a tu backend o cargar la información de otra manera.
-		const fetchUserData = async () => {
-			// Simulación de datos
-			const userData = {
-				nombre: "John Doe",
-				correo: "john@example.com",
-				avatar: "url_de_la_imagen.jpg",
-				direccion: "",
-				ciudad: "",
-				updatedAt: "",
-				recommendedPlaces: [{ name: "", rating: 3 }],
-			};
+	const [newInformation, setNewInformation] = useState({
+		...user,
+		direccion: user?.direccion || '',
+		ciudad: user?.ciudad || '',
+	  });
 
-			// Simulación de retardo en la llamada a la API
-			axios
-				.get("https://655fa07b879575426b45990a.mockapi.io/api/users/" + userId)
-
-				.then((res) => {
-					setUser({ ...userData, ...res.data });
-				});
-
-			// Actualizar el estado con la información obtenida
-		};
-
-		fetchUserData();
-	}, []); // El array vacío asegura que el efecto solo se ejecute una vez al montar el componente
 
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
-		setUser((prevUser) => ({
+		setNewInformation((prevUser) => ({
 			...prevUser,
 			[name]: value,
 		}));
 		setUpdating(true);
 	};
 
-	const onSubmit = (e) => {
+	useEffect( () => {console.log(newInformation)}, [])
+
+	const onSubmit = async (e) => {
 		setSubmitting(true);
 
 		e.preventDefault();
-		axios
-			.put("https://655fa07b879575426b45990a.mockapi.io/api/users/" + userId, {
-				...user,
-			})
+		const res = await axios
+			.put("http://localhost:4000/api/userProfile/" + `${user.id}/`, { ...newInformation })
 			.then(({ data }) => {
 				setSubmitting(false);
 				setUpdating(false);
+				login(newInformation)
+				toast.success('Se actualizaron los datos correctamente.')
 			});
+		console.log(res)
 	};
 
 	return (
 		<div className="bg-gray-200 p-8 rounded-md shadow-md max-w-md mx-auto mt-8">
 			<div className="text-center">
 				<img
-					src={user.avatar}
+					src={user.img}
 					alt="Profile Pic"
 					className="w-[200px] h-[200px] rounded-full mx-auto mb-4"
 				/>
 				<div className="mb-4">
 					<label
 						className="block text-gray-700 text-sm font-bold mb-2"
-						htmlFor="nombre"
+						htmlFor="username"
 					>
-						Nombre:{" "}
+						Nombre:
 					</label>
 					<input
 						type="text"
-						name="nombre"
-						value={user.nombre}
+						name="username"
+						id="username"
+						value={newInformation.username}
 						onChange={handleInputChange}
 						className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 					/>
@@ -93,12 +69,13 @@ export function UserProfile() {
 						className="block text-gray-700 text-sm font-bold mb-2"
 						htmlFor="correo"
 					>
-						Email:{" "}
+						Email:
 					</label>
 					<input
 						type="text"
 						name="correo"
-						value={user.correo}
+						id="correo"
+						value={newInformation.correo}
 						onChange={handleInputChange}
 						className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 					/>
@@ -108,12 +85,13 @@ export function UserProfile() {
 						className="block text-gray-700 text-sm font-bold mb-2"
 						htmlFor="direccion"
 					>
-						Dirección:{" "}
+						Dirección:
 					</label>
 					<input
 						type="text"
 						name="direccion"
-						value={user.direccion}
+						id="direccion"
+						value={newInformation.direccion}
 						onChange={handleInputChange}
 						className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 					/>
@@ -128,7 +106,8 @@ export function UserProfile() {
 					<input
 						type="text"
 						name="ciudad"
-						value={user.ciudad}
+						id="ciudad"
+						value={newInformation.ciudad}
 						onChange={handleInputChange}
 						className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 					/>
@@ -140,7 +119,7 @@ export function UserProfile() {
 						) : (
 							<button
 								onClick={onSubmit}
-								className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+								className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
 							>
 								Actualizar
 							</button>
@@ -149,7 +128,7 @@ export function UserProfile() {
 				)}
 				Ultima Actualización:{" "}
 				<span className="text-green-500">
-					{new Date(user.updatedAt).toLocaleString().substring(0, 17)}{" "}
+					{new Date(user.updateAt).toLocaleString().substring(0, 17)}{" "}
 				</span>
 			</div>
 
@@ -157,13 +136,17 @@ export function UserProfile() {
 				<h3 className="text-lg font-semibold mb-4">
 					Historial de Lugares Recomendados
 				</h3>
-				<ul>
-					{user.recommendedPlaces.map((place, index) => (
-						<li key={index} className="mb-2">
-							{place.name}:<span> {place.rating}</span>
-						</li>
-					))}
-				</ul>
+				{user.lastForm ?
+					<ul>
+						{user.lastForm.map((place, index) => (
+							<li key={index} className="mb-2">
+								{place.name}:<span> {place.rating}</span>
+							</li>
+						))}
+					</ul>
+					:
+					<p>No has realizado aun ningún cuestionario, inténtalo!.</p>
+				}
 			</div>
 		</div>
 	);
