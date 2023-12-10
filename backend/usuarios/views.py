@@ -13,11 +13,11 @@ class LoginView(APIView):
 
   def post(self, request, format=None):
       data = request.data
-      username = data.get('correo')
-      password = data.get('contrasena')
+      correo = data.get('correo')
+      password = data.get('password')
 
       try:
-          user = UserProfile.objects.get(correo=username)
+          user = UserProfile.objects.get(correo=correo)
       except UserProfile.DoesNotExist:
           return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
 
