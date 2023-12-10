@@ -92,13 +92,17 @@ export const FormPage = () => {
             };
         });
 
-        // Ordenar los lugares por puntuación de mayor a menor
-        const lugaresOrdenados = puntuaciones.sort((a, b) => b.score - a.score);
-        lugaresOrdenados.slice(0, 3)
-        // Mostrar los tres mejores lugares
-        console.log(lugaresOrdenados)
-        setTopThree(lugaresOrdenados)
-    }
+			// Ordenar los lugares por puntuación de mayor a menor
+			const lugaresOrdenados = puntuaciones.sort((a, b) => b.score - a.score);
+			//lugaresOrdenados.slice(0, 3);
+			// Mostrar los tres mejores lugares
+			console.log(lugaresOrdenados);
+			setTopThree(lugaresOrdenados.slice(0, 5));
+			localStorage.setItem(
+				"lugaresOrdenados",
+				JSON.stringify(lugaresOrdenados.slice(0, 5))
+			);
+		}
 
 
     //Genera un numero aleatorio
