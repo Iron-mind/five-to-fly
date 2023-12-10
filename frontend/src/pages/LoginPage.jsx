@@ -8,6 +8,8 @@ export const LoginPage = () => {
 
 	//función que se activa cuando se manda el formulario
     const onSubmit = async (data) => {
+		localStorage.setItem("user", JSON.stringify({ id: 1 }));
+
         console.log(data)
 		try {
 			// Realiza la solicitud POST utilizando Axios
@@ -25,6 +27,26 @@ export const LoginPage = () => {
 			// Manejar errores, si es necesario
 		}
     }
+	const { email, password, onInputChange, onResetForm } =
+		useForm({
+			email: '',
+			password: '',
+		});
+
+	const onLogin = e => {
+
+		localStorage.setItem("user", JSON.stringify({ id: 1 }));
+		e.preventDefault();
+
+		navigate('/dashboard', {
+			replace: true,
+			state: {
+				logged: true,
+			},
+		});
+
+		onResetForm();
+	};
 
 	return (
 		<div className='flex flex-wrap mt-8 mx-auto bg-white justify-center rounded-xl sm:w-1/3'>

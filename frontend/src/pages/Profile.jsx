@@ -25,7 +25,7 @@ export function UserProfile() {
 				direccion: "",
 				ciudad: "",
 				updatedAt: "",
-				recommendedPlaces: ["Paris", "Tokyo", "New York"],
+				recommendedPlaces: [{ name: "", rating: 3 }],
 			};
 
 			// Simulación de retardo en la llamada a la API
@@ -160,7 +160,7 @@ export function UserProfile() {
 				<ul>
 					{user.recommendedPlaces.map((place, index) => (
 						<li key={index} className="mb-2">
-							{place}
+							{place.name}:<span> {place.rating}</span>
 						</li>
 					))}
 				</ul>
