@@ -1,6 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from "axios";
+import { toast } from 'react-toastify';
+import { AuthContext } from '../Context/ContextUser';
+import { Link } from 'react-router-dom';
 
 const Lugares = [
     {
@@ -31,16 +34,6 @@ const Lugares = [
         description: "Descripción 3",
     },
 ];
-async function guardarPreguntas() {
-    let i = 0;
-    while (i < Lugares.length) {
-        // alert(Lugares[i].weights.length);
-        await axios.post("https://656cb651e1e03bfd572eab2d.mockapi.io/api/cities", {
-            ...Lugares[i],
-        });
-        i++;
-    }
-}
 
 export const FormPage = () => {
     const { register, handleSubmit } = useForm()
@@ -49,6 +42,9 @@ export const FormPage = () => {
     const [topThree, setTopThree] = useState([])
     const [lugares, setLugares] = useState([]);
     const [preguntas, setPreguntas] = useState([]);
+    const [cargando, setCargando] = useState(true);
+    const { user, login } = useContext(AuthContext);
+
     //funcion que se activa cuando se manda el formulario
     const onSubmit = (data) => {
         console.log(data)
@@ -141,14 +137,29 @@ export const FormPage = () => {
     //useEffect para ver las respuestas
     useEffect(() => {
         if (topThree.length !== 0) {
-            setSumibtted(true);
+            toast.success('Aquí esta tu resultado!.')
+            async function fetchData() {
+                setSubmitted(true);
+                const res = await axios
+                    .put(`http://localhost:4000/api/userProfile/` + `${user.id}/`, {
+                        ...user,
+                        lastForm: topThree,
+                    })
+                    .then(() => {
+                        login({
+                            ...user,
+                            lastForm: topThree,
+                        })
+                    });
+            }
+            fetchData()
         }
     }, [topThree]);
 
     useEffect(() => {
         async function fetchData() {
             let { data } = await axios.get(
-                "http://localhost:4000/questions/api/questions/"
+                "http://localhost:4000/api/questions/"
             );
             let questions = data.map((q, ind) => {
                 return {
@@ -157,18 +168,19 @@ export const FormPage = () => {
                 };
             });
             let res = await axios.get(
-                "http://localhost:4000/questions/api/places/"
+                "http://localhost:4000/api/places/"
             );
             let cities = res.data;
             // alert(JSON.stringify(cities));
             setLugares(cities);
             setPreguntas(questions);
+            setCargando(false)
         }
         fetchData();
     }, []);
 
     return (
-        <article className="flex flex-wrap mt-8 mx-auto bg-white justify-center rounded-t-xl sm:rounded-xl sm:w-2/4">
+        <article className="flex flex-wrap mt-8 mx-auto bg-gray-200 justify-center rounded-t-xl sm:rounded-xl sm:w-2/4">
             {submitted ? (
                 <div className="p-8 flex justify-center flex-col">
                     <h1 className="flex justify-center text-3xl font-bold">
@@ -187,13 +199,14 @@ export const FormPage = () => {
                             <p className="text-xl">{lugar.description}</p>
                         </div>
                     ))}
-                    <div class="flex justify-center mt-11">
-                        <a
-                            href="/evaluate-result"
-                            class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                    <div className="flex justify-center mt-11">
+                        <p>Te gusto el resultado?  </p>
+                        <Link
+                            to="/evaluate-result"
+                            className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                         >
-                            Calificar recomendación
-                        </a>
+                            Califícanos Aquí
+                        </Link>
                     </div>
                 </div>
             ) : (
@@ -204,64 +217,69 @@ export const FormPage = () => {
                     <h1 className="flex justify-center text-3xl font-bold border-b-2">
                         ¡Encuentra tu sitio ideal!
                     </h1>
-                    <p h1 className="flex justify-center text-xl py-2 mb-8">
+                    <p className="flex justify-center text-xl py-2 mb-8">
                         Responde nuestro cuestionario para saber tu proximo lugar
                         turístico.
                     </p>
-                    {ShowQuestions.map((pregunta, index) => (
-                        <div key={pregunta.id} className="w-[100%] pt-8">
-                            <label className="flex justify-start font-medium text-xl xl:text-3xl xl:font-normal">
-                                {index + 1}. {pregunta.texto}
-                            </label>
-                            <div className="flex flex-col items-start py-2 px-4 xl:flex-row xl:justify-around xl:text-xl xl:py-4">
-                                <label className="my-1 w-[100%] xl:w-auto">
-                                    <input
-                                        className="w-5 h-5"
-                                        type="radio"
-                                        value={1}
-                                        {...register(`${pregunta.id}`, { required: true })}
-                                    />
-                                    No
-                                </label>
-                                <label className="my-1 w-[100%] xl:w-auto">
-                                    <input
-                                        className="w-5 h-5"
-                                        type="radio"
-                                        value={2}
-                                        {...register(`${pregunta.id}`, { required: true })}
-                                    />
-                                    Posiblemente no
-                                </label>
-                                <label className="my-1 w-[100%] xl:w-auto">
-                                    <input
-                                        className="w-5 h-5"
-                                        type="radio"
-                                        value={3}
-                                        {...register(`${pregunta.id}`, { required: true })}
-                                    />
-                                    No es relevante
-                                </label>
-                                <label className="my-1 w-[100%] xl:w-auto">
-                                    <input
-                                        className="w-5 h-5"
-                                        type="radio"
-                                        value={4}
-                                        {...register(`${pregunta.id}`, { required: true })}
-                                    />
-                                    Posiblemente si
-                                </label>
-                                <label className="my-1 w-[100%] xl:w-auto">
-                                    <input
-                                        className="w-5 h-5"
-                                        type="radio"
-                                        value={5}
-                                        {...register(`${pregunta.id}`, { required: true })}
-                                    />
-                                    Si
-                                </label>
-                            </div>
-                        </div>
-                    ))}
+                    {cargando ? <p className="flex justify-center text-xl py-2 mb-8">Cargando...</p> :
+                        <>
+                            {ShowQuestions.map((pregunta, index) => (
+                                <div key={pregunta.id} className="w-[100%] pt-8">
+                                    <label className="flex justify-start font-medium text-xl xl:text-3xl xl:font-normal">
+                                        {index + 1}. {pregunta.texto}
+                                    </label>
+                                    <div className="flex flex-col items-start py-2 px-4 xl:flex-row xl:justify-around xl:text-xl xl:py-4">
+                                        <label className="my-1 w-[100%] xl:w-auto">
+                                            <input
+                                                className="w-5 h-5"
+                                                type="radio"
+                                                value={1}
+                                                {...register(`${pregunta.id}`, { required: true })}
+                                            />
+                                            No
+                                        </label>
+                                        <label className="my-1 w-[100%] xl:w-auto">
+                                            <input
+                                                className="w-5 h-5"
+                                                type="radio"
+                                                value={2}
+                                                {...register(`${pregunta.id}`, { required: true })}
+                                            />
+                                            Posiblemente no
+                                        </label>
+                                        <label className="my-1 w-[100%] xl:w-auto">
+                                            <input
+                                                className="w-5 h-5"
+                                                type="radio"
+                                                value={3}
+                                                {...register(`${pregunta.id}`, { required: true })}
+                                            />
+                                            No es relevante
+                                        </label>
+                                        <label className="my-1 w-[100%] xl:w-auto">
+                                            <input
+                                                className="w-5 h-5"
+                                                type="radio"
+                                                value={4}
+                                                {...register(`${pregunta.id}`, { required: true })}
+                                            />
+                                            Posiblemente si
+                                        </label>
+                                        <label className="my-1 w-[100%] xl:w-auto">
+                                            <input
+                                                className="w-5 h-5"
+                                                type="radio"
+                                                value={5}
+                                                {...register(`${pregunta.id}`, { required: true })}
+                                            />
+                                            Si
+                                        </label>
+                                    </div>
+                                </div>
+                            ))}
+                        </>
+                    }
+
                     <button
                         type="submit"
                         className="py-4 px-8 bg-[#585ca4] hover:bg-[#70348c] rounded-xl text-white text-xl flex items-center  shadow-xl w-[100%] mt-4 justify-center "

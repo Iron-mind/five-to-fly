@@ -30,24 +30,50 @@ export const LoginPage = () => {
 	const onSubmit = async (data) => {
 		console.log(data)
 		try {
-			toast.success('Has iniciado sesión con éxito.')
 			// Realiza la solicitud POST utilizando Axios
-			//const response = await axios.post('URL_DEL_BACKEND', data);
-			//console.log('Respuesta del servidor:', response.data);
-			//login(response.data)
+			const res = await axios.post('http://localhost:4000/api/userProfile/', data)
+			console.log('Respuesta del servidor:', res.data);
+			const userData = {
+				id: res.data.id,
+				username: res.data.username,
+				correo: res.data.correo,
+				ciudad: res.data.ciudad,
+				direccion: res.data.direccion,
+				img: res.data.img,
+				updateAt: res.data.updateAt,
+				lastForm: res.data.lastForm,
+				rate: res.data.rate,
+			};
+			login(userData)
+			toast.success('Has iniciado sesión con éxito.')
 			navigate('/form', {
 				replace: true,
 			});
+
 			// Puedes realizar acciones adicionales según la respuesta del servidor
 		} catch (error) {
-			toast.error('Error al enviar el formulario');
-			console.error('Error al enviar el formulario:', error);
-			// Manejar errores, si es necesario
+			if (error.response) {
+				// El servidor devolvió un código de estado diferente de 2xx
+				if (error.response.status === 401) {
+					toast.error('Credenciales incorrectas. Por favor, verifica tu correo y contraseña.');
+				} else if (error.response.status === 403) {
+					toast.error('Acceso no autorizado. Verifica tus permisos.');
+				} else {
+					toast.error(`Email incorrecto o no existe.`);
+				}
+			} else if (error.request) {
+				// La solicitud fue realizada pero no se recibió respuesta
+				toast.error('No se recibió respuesta del servidor. Inténtalo de nuevo más tarde.');
+			} else {
+				// Otro tipo de error
+				toast.error(`Error: ${error}`);
+				console.log(error)
+			}
 		}
 	}
 
 	return (
-		<div className='flex flex-wrap mt-8 mx-auto bg-white justify-center rounded-xl sm:w-1/3'>
+		<div className='flex flex-wrap mt-8 mx-auto bg-gray-200 justify-center rounded-xl sm:w-1/3'>
 			<form onSubmit={handleSubmit(onSubmit)} className='p-8 flex justify-center flex-col xl:w-[100%]'>
 				<h1 className='flex justify-center text-3xl font-bold border-b-2'>Iniciar Sesión</h1>
 				<div className='w-[100%] pt-8 flex flex-col items-center '>

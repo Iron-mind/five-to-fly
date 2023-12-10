@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-)408_lok*6qbip^g&-=xcrt@_!e_a$=0q9@&un@m*%aesi)9hn
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [os.environ['http://localhost:5173']] if 'http://localhost:5173' in os.environ else []
 
 
 # Application definition
@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'usuarios',
-    'rest_framework',
     "corsheaders",
 ]
 
@@ -137,5 +136,32 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5432",
 ]
 
+CORS_ALLOW_METHODS = (
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+)
+
+CORS_ALLOW_HEADERS = (
+    "accept",
+    "authorization",
+    "content-type",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+)
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://localhost:5432",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "http://localhost:5432",
+]
 AUTH_USER_MODEL = 'usuarios.UserProfile'
 AUTH_GROUP_MODEL = 'usuarios.Role'

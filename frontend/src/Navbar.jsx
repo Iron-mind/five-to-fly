@@ -19,7 +19,7 @@ export const Navbar = () => {
 
 	return (
 		<>
-			<header className='bg-white text-gray-800 rounded-b-lg flex flex-col items-center sm:flex sm:flex-row sm:justify-around sm:py-4'>
+			<header className='bg-gray-200 text-gray-800 rounded-b-lg flex flex-col items-center sm:flex sm:flex-row sm:justify-around sm:py-4'>
 				<div className='flex flex-col items-center sm:flex-row sm:w-auto sm:pl-4'>
 					<img
 						width={50}
@@ -31,21 +31,27 @@ export const Navbar = () => {
 					<h1 className='flex justify-center uppercase text-3xl font-bold py-2 sm:py-0 sm:px-5'>
 						<Link to="">Five to Fly</Link>
 					</h1>
+					{user ? (
+						<Link to={`form/`} className='p-5 ml-10 bg-[#585ca4] hover:bg-[#70348c] rounded-lg text-white text-xl flex items-center shadow-xl font-bold sm:mr-8 '>
+							<button>Formulario</button>
+						</Link>)
+						:<></>}
 				</div>
 
 				{user ? (
 					<nav className='flex justify-around w-[100%] mb-4 mt-2 sm:my-0 sm:w-auto'>
-						<button className='p-3 text-xl bg-[#585ca4] hover:bg-[#70348c] rounded-lg text-white flex items-center mb-2 sm:bg-white sm:text-gray-800 sm:hover:text-white sm:hover:rounded-lg mr-4 sm:hover:shadow-xl sm:mb-0' onClick={onLogout}>
+
+						<button className='p-5 text-xl bg-[#585ca4] hover:bg-[#70348c] rounded-lg text-white flex items-center sm:bg-gray-200 sm:text-gray-800 font-bold sm:font-normal sm:hover:text-white sm:hover:rounded-lg  sm:hover:shadow-xl sm:mr-4' onClick={onLogout}>
 							Cerrar sesión
 						</button>
-						<Link to={`profile/${user.id}`} className='p-3 bg-[#585ca4] hover:bg-[#70348c] rounded-lg text-white text-xl flex items-center sm:mr-8 shadow-xl'>
-							<button>{user.name}</button>
+						<Link to={`profile/${user.id}`} className='p-5 bg-[#585ca4] hover:bg-[#70348c] rounded-lg text-white text-xl flex items-center font-bold sm:mr-8 shadow-xl'>
+							<button>{user.username}</button>
 						</Link>
 					</nav>
 				) : (
 					<nav className='flex justify-around w-[100%] mb-4 mt-2 sm:my-0 sm:w-auto'>
-						<Link to="/register" className='p-3 text-xl bg-[#585ca4] hover:bg-[#70348c] rounded-lg text-white flex items-center sm:bg-white sm:text-gray-800 sm:hover:text-white sm:hover:rounded-lg mr-4 sm:hover:shadow-xl'><button >Registrarse</button></Link>
-						<Link to="/login" className='p-3 bg-[#585ca4] hover:bg-[#70348c] rounded-lg text-white text-xl flex items-center sm:mr-8 shadow-xl'><button>Iniciar sesión</button></Link>
+						<Link to="/register" className='p-5 text-xl bg-[#585ca4] hover:bg-[#70348c] rounded-lg text-white flex items-center sm:bg-gray-200 sm:text-gray-800 font-bold sm:font-normal sm:hover:text-white sm:hover:rounded-lg  sm:hover:shadow-xl sm:mr-4'><button >Registrarse</button></Link>
+						<Link to="/login" className='p-5 bg-[#585ca4] hover:bg-[#70348c] rounded-lg text-white text-xl flex items-center font-bold sm:mr-8 shadow-xl'><button>Iniciar sesión</button></Link>
 					</nav>
 				)}
 			</header>

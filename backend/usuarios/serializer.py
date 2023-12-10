@@ -10,3 +10,13 @@ class PlacesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Places
         fields = '__all__'
+
+class UserProfileSerializer(serializers.ModelSerializer):
+   class Meta:
+       model = UserProfile
+       fields = '__all__'
+
+class UserRegistrationSerializer(UserProfileSerializer):
+  class Meta(UserProfileSerializer.Meta):
+      fields = UserProfileSerializer.Meta.fields
+      extra_kwargs = {'contrasena': {'write_only': True}}
