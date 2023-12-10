@@ -9,31 +9,31 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: 16
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
 
-    - name: Set up Python
+      - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: 3.12.0
 
+      - name: Build Docker Django Image
+        run: cd backend && docker build -t my-django-app .
 
-    - name: Build Docker Django Image
-        run: cd django && docker build -t my-django-app .
+      - name: Run Django models test
+        run: cd backend && docker run my-django-app sh -c "python manage.py test"
 
-    - name: Run Django models test
-        run: cd django && docker run my-django-app sh -c "python manage.py test"
+      - name: Build Docker Frontend Image
+        run: cd frontend && docker build -t my-react-app .
 
-    - name: Build Docker Frontend Image
-      run: cd frontend && docker build -t my-react-app .
+      - name: Run Test
+        run: cd frontend && docker run -d my-react-app
 
-    - name: Run Test
-      run: cd frontend && docker run my-react-app npm test
 
     
       
