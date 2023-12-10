@@ -1,17 +1,17 @@
+import { useContext } from 'react';
 import {
 	Link,
 	Outlet,
-	useLocation,
 	useNavigate,
 } from 'react-router-dom';
+import { AuthContext } from './Context/ContextUser';
 
 export const Navbar = () => {
-	const { state } = useLocation();
+	const { user, logout } = useContext(AuthContext);
 	const navigate = useNavigate();
 
-	console.log(state);
-
 	const onLogout = () => {
+		logout()
 		navigate('/login', {
 			replace: true,
 		});
@@ -33,12 +33,15 @@ export const Navbar = () => {
 					</h1>
 				</div>
 
-				{state?.logged ? (
-					<div className="">
+				{user ? (
+					<nav className='flex justify-around w-[100%] mb-4 mt-2 sm:my-0 sm:w-auto'>
 						<button className='p-3 text-xl bg-[#585ca4] hover:bg-[#70348c] rounded-lg text-white flex items-center mb-2 sm:bg-white sm:text-gray-800 sm:hover:text-white sm:hover:rounded-lg mr-4 sm:hover:shadow-xl sm:mb-0' onClick={onLogout}>
 							Cerrar sesión
 						</button>
-					</div>
+						<Link to={`profile/${user.id}`} className='p-3 bg-[#585ca4] hover:bg-[#70348c] rounded-lg text-white text-xl flex items-center sm:mr-8 shadow-xl'>
+							<button>{user.name}</button>
+						</Link>
+					</nav>
 				) : (
 					<nav className='flex justify-around w-[100%] mb-4 mt-2 sm:my-0 sm:w-auto'>
 						<Link to="/register" className='p-3 text-xl bg-[#585ca4] hover:bg-[#70348c] rounded-lg text-white flex items-center sm:bg-white sm:text-gray-800 sm:hover:text-white sm:hover:rounded-lg mr-4 sm:hover:shadow-xl'><button >Registrarse</button></Link>

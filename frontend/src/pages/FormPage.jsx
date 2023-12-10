@@ -45,7 +45,7 @@ async function guardarPreguntas() {
 export const FormPage = () => {
     const { register, handleSubmit } = useForm()
     const [ShowQuestions, setShowQuestions] = useState([])
-    const [sumitted, setSumitted] = useState(false)
+    const [submitted, setSubmitted] = useState(false)
     const [topThree, setTopThree] = useState([])
     const [lugares, setLugares] = useState([]);
 		const [preguntas, setPreguntas] = useState([]);
@@ -128,7 +128,7 @@ export const FormPage = () => {
     //useEffect para ver las respuestas
     useEffect(() => {
         if (topThree.length !== 0) {
-            setSumitted(true)
+            setSubmitted(true)
         }
     }, [topThree]);
 
@@ -156,7 +156,7 @@ export const FormPage = () => {
   
     return (
         <article className='flex flex-wrap mt-8 mx-auto bg-white justify-center rounded-t-xl sm:rounded-xl sm:w-2/4'>
-            {sumitted ?
+            {submitted ?
                 <div className='p-8 flex justify-center flex-col'>
                     <h1 className='flex justify-center text-3xl font-bold'>¡Aquí esta tu ranking de los mejores lugares que te recomendamos según tus respuestas!</h1>
                     {topThree.map((lugar, index) => (
@@ -186,7 +186,7 @@ export const FormPage = () => {
                                 </label>
                                 <label className='my-1 w-[100%] xl:w-auto'>
                                     <input className="w-5 h-5" type="radio" value={3} {...register(`${pregunta.id}`, { required: true })} />
-                                    No es revelevante
+                                    No es relevante
                                 </label>
                                 <label className='my-1 w-[100%] xl:w-auto'>
                                     <input className="w-5 h-5" type="radio" value={4} {...register(`${pregunta.id}`, { required: true })} />
