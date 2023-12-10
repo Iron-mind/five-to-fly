@@ -37,7 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework.authtoken',
     'usuarios',
+    'Questions',
 ]
 
 MIDDLEWARE = [
@@ -76,8 +79,14 @@ WSGI_APPLICATION = 'five_to_fly.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db' / 'five_to_fly_db.sqlite3'
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'five_to_fly_jrqw',
+        'USER': 'five_to_fly_jrqw_user',
+        'PASSWORD': 'sY5SPLaaPu0V8dgLlhGhEDfjDqFYgdnX',
+        'HOST': 'dpg-clbv93eg1b2c73eqb3pg-a.oregon-postgres.render.com',
+        'PORT': '5432'
+        #'django.db.backends.sqlite3',
+        #'NAME': BASE_DIR / 'db' / 'five_to_fly_db.sqlite3'
     }
 }
 
@@ -122,3 +131,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'usuarios.UserProfile'
+AUTH_GROUP_MODEL = 'usuarios.Role'
