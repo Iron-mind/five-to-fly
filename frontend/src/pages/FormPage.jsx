@@ -76,132 +76,203 @@ export const FormPage = () => {
 
     //Compara los lugares con las respuestas generadas y los ordena de mayor a menor puntuacion, entregando solo 3 lugares
     function compararLugaresTuristicos(respuesta, lugares) {
-        if (!respuesta || !lugares || !Array.isArray(lugares) || lugares.length < 2) {
-            console.log("Se necesitan al menos dos lugares para comparar.");
-            return;
-        }
+			if (
+				!respuesta ||
+				!lugares ||
+				!Array.isArray(lugares) ||
+				lugares.length < 2
+			) {
+				console.log("Se necesitan al menos dos lugares para comparar.");
+				return;
+			}
 
-        // Calcular la puntuación ponderada para cada lugar turístico
-        const puntuaciones = lugares.map((lugar) => {
-            return {
-                name: lugar.name,
-                score: calcularPuntuacionPonderada(respuesta, lugar.weights),
-                img: lugar.img,
-                description: lugar.description
-            };
-        });
-
-        // Ordenar los lugares por puntuación de mayor a menor
-        const lugaresOrdenados = puntuaciones.sort((a, b) => b.score - a.score);
-        lugaresOrdenados.slice(0, 3)
-        // Mostrar los tres mejores lugares
-        console.log(lugaresOrdenados)
-        setTopThree(lugaresOrdenados)
-    }
-
-    //Genera un numero aleatorio
-    function getRandomInt(max) {
-        return Math.floor(Math.random() * max);
-    }
-
-    //useEffect para organizar las preguntas de forma aleatoria
-    useEffect(() => {
-        const agregarPreguntaAleatoria = () => {
-            let number;
-            // Confirmacion para que no se repite numeros (por si acaso)
-            do {
-                number = getRandomInt(preguntas.length);
-            } while (ShowQuestions.some(question => question.id === preguntas[number].id));
-
-            // Añade la pregunta aleatoria para mostrar
-            setShowQuestions(prevQuestions => [...prevQuestions, preguntas[number]]);
-
-            // Elimina la pregunta aleatoria del array original
-            setPreguntas(prevPreguntas => prevPreguntas.filter((_, index) => index !== number));
-        };
-
-        if (preguntas.length > 0 && ShowQuestions.length < 10) {
-            agregarPreguntaAleatoria();
-        }
-    }, [preguntas, ShowQuestions]);
-
-    //useEffect para ver las respuestas
-    useEffect(() => {
-        if (topThree.length !== 0) {
-            setSumitted(true)
-        }
-    }, [topThree]);
-
-    useEffect(() => {
-		async function fetchData() {
-			let { data } = await axios.get(
-				"https://656bebe7e1e03bfd572de71f.mockapi.io/api/questions"
-			);
-			let questions = data.map((q, ind) => {
+			// Calcular la puntuación ponderada para cada lugar turístico
+			const puntuaciones = lugares.map((lugar) => {
 				return {
-					texto: q.texto,
-					id: ind,
+					name: lugar.name,
+					score: calcularPuntuacionPonderada(respuesta, lugar.weights),
+					img: lugar.img,
+					description: lugar.description,
 				};
 			});
-			let res = await axios.get(
-				"https://656cb651e1e03bfd572eab2d.mockapi.io/api/cities"
+
+			// Ordenar los lugares por puntuación de mayor a menor
+			const lugaresOrdenados = puntuaciones.sort((a, b) => b.score - a.score);
+			lugaresOrdenados.slice(0, 3);
+			// Mostrar los tres mejores lugares
+			console.log(lugaresOrdenados);
+			setTopThree(lugaresOrdenados);
+			localStorage.setItem(
+				"lugaresOrdenados",
+				JSON.stringify(lugaresOrdenados)
 			);
-			let cities = res.data;
-			// alert(JSON.stringify(cities));
-			setLugares(cities);
-			setPreguntas(questions);
 		}
-		fetchData();
-	}, []);
-  
-    return (
-        <article className='flex flex-wrap mt-8 mx-auto bg-white justify-center rounded-t-xl sm:rounded-xl sm:w-2/4'>
-            {sumitted ?
-                <div className='p-8 flex justify-center flex-col'>
-                    <h1 className='flex justify-center text-3xl font-bold'>¡Aquí esta tu ranking de los mejores lugares que te recomendamos según tus respuestas!</h1>
-                    {topThree.map((lugar, index) => (
-                        <div className='mt-6' key={index}>
-                            <img className="w-[100%] rounded-xl" src={lugar.img} />
-                            <h2 className='flex justify-center pt-8 uppercase text-3xl font-bold'>{index + 1}. {lugar.name}</h2>
-                            <p className='flex justify-center text-xl'>Puntuación: {lugar.score}</p>
-                            <p className='text-xl'>{lugar.description}</p>
-                        </div>
-                    ))}
-                </div>
-                :
-                <form onSubmit={handleSubmit(onSubmit)} className='p-8 flex justify-center flex-col xl:w-[100%]'>
-                    <h1 className='flex justify-center text-3xl font-bold border-b-2'>¡Encuentra tu sitio ideal!</h1>
-                    <p h1 className='flex justify-center text-xl py-2 mb-8'>Responde nuestro cuestionario para saber tu proximo lugar turistico.</p>
-                    {ShowQuestions.map((pregunta,index) => (
-                        <div key={pregunta.id} className='w-[100%] pt-8'>
-                            <label className='flex justify-start font-medium text-xl xl:text-3xl xl:font-normal'>{index + 1}. {pregunta.texto}</label>
-                            <div className='flex flex-col items-start py-2 px-4 xl:flex-row xl:justify-around xl:text-xl xl:py-4'>
-                                <label className='my-1 w-[100%] xl:w-auto'> 
-                                    <input className="w-5 h-5" type="radio" value={1} {...register(`${pregunta.id}`, { required: true })}/>
-                                    No
-                                </label>
-                                <label className='my-1 w-[100%] xl:w-auto'>
-                                    <input className="w-5 h-5" type="radio" value={2} {...register(`${pregunta.id}`, { required: true })} />
-                                    Posiblemente no
-                                </label>
-                                <label className='my-1 w-[100%] xl:w-auto'>
-                                    <input className="w-5 h-5" type="radio" value={3} {...register(`${pregunta.id}`, { required: true })} />
-                                    No es revelevante
-                                </label>
-                                <label className='my-1 w-[100%] xl:w-auto'>
-                                    <input className="w-5 h-5" type="radio" value={4} {...register(`${pregunta.id}`, { required: true })} />
-                                    Posiblemente si
-                                </label>
-                                <label className='my-1 w-[100%] xl:w-auto'>
-                                    <input className="w-5 h-5" type="radio" value={5} {...register(`${pregunta.id}`, { required: true })} />
-                                    Si
-                                </label>
-                            </div>
-                        </div>
-                    ))}
-                    <button type="submit" className='py-4 px-8 bg-[#585ca4] hover:bg-[#70348c] rounded-xl text-white text-xl flex items-center  shadow-xl w-[100%] mt-4 justify-center '>Enviar</button>
-                </form>
-            }
-        </article>
-	);
+
+		//Genera un numero aleatorio
+		function getRandomInt(max) {
+			return Math.floor(Math.random() * max);
+		}
+
+		//useEffect para organizar las preguntas de forma aleatoria
+		useEffect(() => {
+			const agregarPreguntaAleatoria = () => {
+				let number;
+				// Confirmacion para que no se repite numeros (por si acaso)
+				do {
+					number = getRandomInt(preguntas.length);
+				} while (
+					ShowQuestions.some((question) => question.id === preguntas[number].id)
+				);
+
+				// Añade la pregunta aleatoria para mostrar
+				setShowQuestions((prevQuestions) => [
+					...prevQuestions,
+					preguntas[number],
+				]);
+
+				// Elimina la pregunta aleatoria del array original
+				setPreguntas((prevPreguntas) =>
+					prevPreguntas.filter((_, index) => index !== number)
+				);
+			};
+
+			if (preguntas.length > 0 && ShowQuestions.length < 10) {
+				agregarPreguntaAleatoria();
+			}
+		}, [preguntas, ShowQuestions]);
+
+		//useEffect para ver las respuestas
+		useEffect(() => {
+			if (topThree.length !== 0) {
+				setSumitted(true);
+			}
+		}, [topThree]);
+
+		useEffect(() => {
+			async function fetchData() {
+				let { data } = await axios.get(
+					"https://656bebe7e1e03bfd572de71f.mockapi.io/api/questions"
+				);
+				let questions = data.map((q, ind) => {
+					return {
+						texto: q.texto,
+						id: ind,
+					};
+				});
+				let res = await axios.get(
+					"https://656cb651e1e03bfd572eab2d.mockapi.io/api/cities"
+				);
+				let cities = res.data;
+				// alert(JSON.stringify(cities));
+				setLugares(cities);
+				setPreguntas(questions);
+			}
+			fetchData();
+		}, []);
+
+		return (
+			<article className="flex flex-wrap mt-8 mx-auto bg-white justify-center rounded-t-xl sm:rounded-xl sm:w-2/4">
+				{sumitted ? (
+					<div className="p-8 flex justify-center flex-col">
+						<h1 className="flex justify-center text-3xl font-bold">
+							¡Aquí esta tu ranking de los mejores lugares que te recomendamos
+							según tus respuestas!
+						</h1>
+						{topThree.map((lugar, index) => (
+							<div className="mt-6" key={index}>
+								<img className="w-[100%] rounded-xl" src={lugar.img} />
+								<h2 className="flex justify-center pt-8 uppercase text-3xl font-bold">
+									{index + 1}. {lugar.name}
+								</h2>
+								<p className="flex justify-center text-xl">
+									Puntuación: {lugar.score}
+								</p>
+								<p className="text-xl">{lugar.description}</p>
+							</div>
+						))}
+						<div class="flex justify-center mt-11">
+							<a
+								href="/evaluate-result"
+								class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+							>
+								Calificar recomendación
+							</a>
+						</div>
+					</div>
+				) : (
+					<form
+						onSubmit={handleSubmit(onSubmit)}
+						className="p-8 flex justify-center flex-col xl:w-[100%]"
+					>
+						<h1 className="flex justify-center text-3xl font-bold border-b-2">
+							¡Encuentra tu sitio ideal!
+						</h1>
+						<p h1 className="flex justify-center text-xl py-2 mb-8">
+							Responde nuestro cuestionario para saber tu proximo lugar
+							turistico.
+						</p>
+						{ShowQuestions.map((pregunta, index) => (
+							<div key={pregunta.id} className="w-[100%] pt-8">
+								<label className="flex justify-start font-medium text-xl xl:text-3xl xl:font-normal">
+									{index + 1}. {pregunta.texto}
+								</label>
+								<div className="flex flex-col items-start py-2 px-4 xl:flex-row xl:justify-around xl:text-xl xl:py-4">
+									<label className="my-1 w-[100%] xl:w-auto">
+										<input
+											className="w-5 h-5"
+											type="radio"
+											value={1}
+											{...register(`${pregunta.id}`, { required: true })}
+										/>
+										No
+									</label>
+									<label className="my-1 w-[100%] xl:w-auto">
+										<input
+											className="w-5 h-5"
+											type="radio"
+											value={2}
+											{...register(`${pregunta.id}`, { required: true })}
+										/>
+										Posiblemente no
+									</label>
+									<label className="my-1 w-[100%] xl:w-auto">
+										<input
+											className="w-5 h-5"
+											type="radio"
+											value={3}
+											{...register(`${pregunta.id}`, { required: true })}
+										/>
+										No es revelevante
+									</label>
+									<label className="my-1 w-[100%] xl:w-auto">
+										<input
+											className="w-5 h-5"
+											type="radio"
+											value={4}
+											{...register(`${pregunta.id}`, { required: true })}
+										/>
+										Posiblemente si
+									</label>
+									<label className="my-1 w-[100%] xl:w-auto">
+										<input
+											className="w-5 h-5"
+											type="radio"
+											value={5}
+											{...register(`${pregunta.id}`, { required: true })}
+										/>
+										Si
+									</label>
+								</div>
+							</div>
+						))}
+						<button
+							type="submit"
+							className="py-4 px-8 bg-[#585ca4] hover:bg-[#70348c] rounded-xl text-white text-xl flex items-center  shadow-xl w-[100%] mt-4 justify-center "
+						>
+							Enviar
+						</button>
+					</form>
+				)}
+			</article>
+		);
 };

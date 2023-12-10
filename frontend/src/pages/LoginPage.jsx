@@ -11,6 +11,8 @@ export const LoginPage = () => {
 		});
 
 	const onLogin = e => {
+
+		localStorage.setItem("user", JSON.stringify({ id: 1 }));
 		e.preventDefault();
 
 		navigate('/dashboard', {
