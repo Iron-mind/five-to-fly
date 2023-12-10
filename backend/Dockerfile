@@ -1,11 +1,20 @@
-FROM python:3
+# Usa una imagen base de Python
+FROM python:3.8
 
-ENV PYTHONUNBUFFERED 1
-RUN mkdir /code
-WORKDIR /code
-COPY requirements.txt /code/
-RUN pip install -r requirements.txt
-COPY . /code/
-ARG URL=localhost:4000
+# Establece el directorio de trabajo en el contenedor
+WORKDIR /app
 
-CMD ["sh", "-c", "python manage.py makemigrations && python manage.py migrate && python manage.py runserver $URL"]
+# Copia el archivo requirements.txt al contenedor
+COPY requirements.txt .
+
+# Instala las dependencias
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copia el resto de la aplicación al contenedor
+COPY . .
+
+# Expone el puerto en el que se ejecutará la aplicación
+EXPOSE 4000
+
+# Comando para ejecutar la aplicación
+CMD ["python", "manage.py", "runserver", "0.0.0.0:4000"]
