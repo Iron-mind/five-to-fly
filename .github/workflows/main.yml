@@ -25,14 +25,14 @@ jobs:
       - name: Build Docker Django Image
         run: cd backend && docker build -t my-django-app .
 
-      - name: Run Django models test
+      - name: Run Django models test in Docker
         run: cd backend && docker run my-django-app sh -c "python manage.py test"
 
       - name: Build Docker Frontend Image
         run: cd frontend && docker build -t my-react-app .
 
-      - name: Run Test
-        run: cd frontend && docker run -d my-react-app
+      - name: Run frontend tests in Docker
+        run: cd frontend && docker run my-react-app npm test
 
 
     

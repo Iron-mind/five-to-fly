@@ -1,14 +1,7 @@
-//jest.config.js
-
-export default {
-    setupFilesAfterEnv: ["<rootDir>/src/setupTests.js"],
-    testEnvironment: "jsdom",
-    moduleNameMapper: {
-      "^@/(.*)$": "<rootDir>/src/$1",
-    },
+module.exports = {
+    testEnvironment: 'jsdom',
     transform: {
-      "^.+\\.jsx?$": "babel-jest",
-    },
-    testEnvironment: 'jest-environment-jsdom',
-  };
-  
+        "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
+    }
+    // Otras configuraciones de Jest...
+};

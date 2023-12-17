@@ -5,35 +5,52 @@ import { toast } from 'react-toastify';
 import { AuthContext } from '../Context/ContextUser';
 import { Link } from 'react-router-dom';
 
-const Lugares = [
-    {
-        name: "Cancún",
-        weights: [
-            2, 3, 1, 2, 3, 3, 2, 1, 2, 1, 1, 3, 3, 1, 1, 2, 3, 3, 1, 1, 2, 1, 1, 2, 1,
-            3, 2, 2, 2, 2,
-        ],
-        img: "https://cdn.vallarta-adventures.com/sites/default/files/2019-01/cancun-about-weather%20%281%29.jpg",
-        description: "Descripción 1",
-    },
-    {
-        name: "Tokyo",
-        weights: [
-            2, 1, 2, 3, 1, 1, 2, 3, 1, 3, 3, 1, 1, 2, 1, 3, 2, 1, 3, 1, 2, 1, 2, 1, 3,
-            2, 2, 2, 2, 1,
-        ],
-        img: "https://media.cntraveler.com/photos/60341fbad7bd3b27823c9db2/4:3/w_4624,h_3468,c_limit/Tokyo-2021-GettyImages-1208124099.jpg",
-        description: "Descripción 2",
-    },
-    {
-        name: "Marruecos",
-        weights: [
-            3, 2, 3, 1, 3, 3, 2, 1, 2, 1, 1, 3, 3, 2, 2, 3, 1, 2, 1, 3, 2, 3, 2, 3, 1,
-            2, 3, 3, 3, 3,
-        ],
-        img: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/29/fb/25/a5/caption.jpg?w=700&h=-1&s=1",
-        description: "Descripción 3",
-    },
-];
+//Compara los lugares con las respuestas generadas y los ordena de mayor a menor puntuacion, entregando solo 3 lugares
+export function compararLugaresTuristicos(respuesta, lugares) {
+    if (
+        !respuesta ||
+        !lugares ||
+        !Array.isArray(lugares) ||
+        lugares.length < 2
+    ) {
+        console.log("Se necesitan al menos dos lugares para comparar.");
+        return;
+    }
+
+    // Calcular la puntuación ponderada para cada lugar turístico
+    const puntuaciones = lugares.map((lugar) => {
+        return {
+            name: lugar.name,
+            score: calcularPuntuacionPonderada(respuesta, lugar.weights),
+            img: lugar.img,
+            description: lugar.description
+        };
+    });
+
+    // Ordenar los lugares por puntuación de mayor a menor
+    const lugaresOrdenados = puntuaciones.sort((a, b) => b.score - a.score);
+    lugaresOrdenados.slice(0, 3)
+    return lugaresOrdenados
+}
+
+//calculo las puntuaciones de cada lugar con sus respectivos pesos
+export function calcularPuntuacionPonderada(respuesta, weights) {
+    // Verificar si se proporcionan respuesta y pesos válidos
+    if (!respuesta || !weights || !Array.isArray(weights)) {
+        console.log("La respuesta o los pesos proporcionados no son válidos.");
+        return 0;
+    }
+
+    // Obtener las preguntas presentes en la respuesta
+    const keys = Object.keys(respuesta);
+
+    // Sumar los productos de la calificación y los pesos
+    const puntuacionTotal = keys.reduce((acumulador, pregunta) => {
+        return acumulador + parseInt(respuesta[pregunta]) * parseInt(weights[pregunta]);
+    }, 0);
+
+    return puntuacionTotal;
+}
 
 export const FormPage = () => {
     const { register, handleSubmit } = useForm()
@@ -47,59 +64,9 @@ export const FormPage = () => {
 
     //funcion que se activa cuando se manda el formulario
     const onSubmit = (data) => {
-        console.log(data)
-        compararLugaresTuristicos(data, lugares)
+        const resultado = compararLugaresTuristicos(data, lugares)
+        setTopThree(resultado)
     }
-
-    //calculo las puntuaciones de cada lugar con sus respectivos pesos
-    function calcularPuntuacionPonderada(respuesta, weights) {
-        // Verificar si se proporcionan respuesta y pesos válidos
-        if (!respuesta || !weights || !Array.isArray(weights)) {
-            console.log("La respuesta o los pesos proporcionados no son válidos.");
-            return 0;
-        }
-
-        // Obtener las preguntas presentes en la respuesta
-        const keys = Object.keys(respuesta);
-
-        // Sumar los productos de la calificación y los pesos
-        const puntuacionTotal = keys.reduce((acumulador, pregunta) => {
-            return acumulador + parseInt(respuesta[pregunta]) * parseInt(weights[pregunta]);
-        }, 0);
-
-        return puntuacionTotal;
-    }
-
-    //Compara los lugares con las respuestas generadas y los ordena de mayor a menor puntuacion, entregando solo 3 lugares
-    function compararLugaresTuristicos(respuesta, lugares) {
-        if (
-            !respuesta ||
-            !lugares ||
-            !Array.isArray(lugares) ||
-            lugares.length < 2
-        ) {
-            console.log("Se necesitan al menos dos lugares para comparar.");
-            return;
-        }
-
-        // Calcular la puntuación ponderada para cada lugar turístico
-        const puntuaciones = lugares.map((lugar) => {
-            return {
-                name: lugar.name,
-                score: calcularPuntuacionPonderada(respuesta, lugar.weights),
-                img: lugar.img,
-                description: lugar.description
-            };
-        });
-
-        // Ordenar los lugares por puntuación de mayor a menor
-        const lugaresOrdenados = puntuaciones.sort((a, b) => b.score - a.score);
-        lugaresOrdenados.slice(0, 3)
-        // Mostrar los tres mejores lugares
-        console.log(lugaresOrdenados)
-        setTopThree(lugaresOrdenados)
-    }
-
 
     //Genera un numero aleatorio
     function getRandomInt(max) {
@@ -291,3 +258,4 @@ export const FormPage = () => {
         </article>
     );
 };
+
