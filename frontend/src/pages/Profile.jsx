@@ -146,7 +146,7 @@ export function UserProfile() {
 					<ul>
 						{user.lastForm.map((place, index) => (
 							<li key={index} className="mb-2">
-								{place.name}:<span> {place.rating}</span>
+								{place.name}:<span> {place.score}</span>
 							</li>
 						))}
 					</ul>

@@ -28,8 +28,8 @@ export function compararLugaresTuristicos(respuesta, lugares) {
 
     // Ordenar los lugares por puntuación de mayor a menor
     const lugaresOrdenados = puntuaciones.sort((a, b) => b.score - a.score);
-    lugaresOrdenados.slice(0, 3)
-    return lugaresOrdenados
+    return lugaresOrdenados.slice(0, 5);
+     
 }
 
 //calculo las puntuaciones de cada lugar con sus respectivos pesos
