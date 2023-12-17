@@ -44,7 +44,10 @@ export function UserProfile() {
 		<div className="bg-gray-200 p-8 rounded-md shadow-md max-w-md mx-auto mt-8">
 			<div className="text-center">
 				<img
-					src={user.img}
+					src={
+						user.img ||
+						"https://imgs.search.brave.com/o-Jr6SJnUB5c5kAUeEbyCkum4-i2470l41dMBXzm-g4/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTIw/OTY1NDA0Ni92ZWN0/b3IvdXNlci1hdmF0/YXItcHJvZmlsZS1p/Y29uLWJsYWNrLXZl/Y3Rvci1pbGx1c3Ry/YXRpb24uanBnP3M9/NjEyeDYxMiZ3PTAm/az0yMCZjPUVPWVhB/Q2p0Wm1aUTVJc1ow/VVVwMWlObVo5cTJ4/bDFCRDFWdk42dFoy/VUk9"
+					}
 					alt="Profile Pic"
 					className="w-[200px] h-[200px] rounded-full mx-auto mb-4"
 				/>
@@ -136,7 +139,7 @@ export function UserProfile() {
 				<h3 className="text-lg font-semibold mb-4">
 					Historial de Lugares Recomendados
 				</h3>
-				{user.lastForm ?
+				{user.lastForm ? (
 					<ul>
 						{user.lastForm.map((place, index) => (
 							<li key={index} className="mb-2">
@@ -144,9 +147,9 @@ export function UserProfile() {
 							</li>
 						))}
 					</ul>
-					:
+				) : (
 					<p>No has realizado aun ningún cuestionario, inténtalo!.</p>
-				}
+				)}
 			</div>
 		</div>
 	);
