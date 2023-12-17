@@ -30,12 +30,15 @@ export function UserProfile() {
 
 		e.preventDefault();
 		const res = await axios
-			.put("http://localhost:4000/api/userProfile/" + `${user.id}/`, { ...newInformation })
+			.put(
+				"https://five-to-fly.onrender.com/api/userProfile/" + `${user.id}/`,
+				{ ...newInformation }
+			)
 			.then(({ data }) => {
 				setSubmitting(false);
 				setUpdating(false);
-				login(newInformation)
-				toast.success('Se actualizaron los datos correctamente.')
+				login(newInformation);
+				toast.success("Se actualizaron los datos correctamente.");
 			});
 		console.log(res)
 	};
