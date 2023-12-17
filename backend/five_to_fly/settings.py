@@ -166,5 +166,5 @@ CSRF_TRUSTED_ORIGINS = [
 AUTH_USER_MODEL = 'usuarios.UserProfile'
 AUTH_GROUP_MODEL = 'usuarios.Role'
 
-ALLOWED_HOSTS = ['five-to-fly.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['five-to-fly.onrender.com', 'localhost', '127.0.0.1','five-to-fly.netlify.app']
 
