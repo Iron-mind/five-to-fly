@@ -16,8 +16,8 @@ class UserProfile(AbstractUser):
     rate = models.IntegerField(null=True, blank=True)
     
     def save(self, *args, **kwargs):
-        # Actualiza manualmente el campo 'update_at' antes de guardar
-        self.update_at = timezone.now()
+        # Actualiza manualmente el campo 'updateAt' antes de guardar
+        self.updateAt = timezone.now()
         super().save(*args, **kwargs)
    
 
