@@ -155,11 +155,6 @@ CORS_ALLOW_HEADERS = (
     "x-requested-with",
 )
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://localhost:5432",
-]
-
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://localhost:5432",
