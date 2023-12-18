@@ -134,8 +134,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://localhost:5432",
-    "https://five-to-fly.netlify.app",
-    "https://five-to-fly.onrender.com"
+    "https://five-to-fly.netlify.app"
+    
 ]
 
 CORS_ALLOW_METHODS = (
