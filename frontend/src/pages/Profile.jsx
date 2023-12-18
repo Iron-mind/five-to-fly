@@ -31,7 +31,7 @@ export function UserProfile() {
 		e.preventDefault();
 		const res = await axios
 			.put(
-				"https://five-to-fly.onrender.com/api/userProfile/" + `${user.id}/`,
+				"http://localhost:4000/api/userProfile/" + `${user.id}/`,
 				{ ...newInformation }
 			)
 			.then(({ data }) => {

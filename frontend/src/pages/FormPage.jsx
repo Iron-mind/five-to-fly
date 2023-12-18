@@ -108,7 +108,7 @@ export const FormPage = () => {
 				setSubmitted(true);
 				const res = await axios
 					.put(
-						`https://five-to-fly.onrender.com/api/userProfile/` + `${user.id}/`,
+						`http://localhost:4000/api/userProfile/` + `${user.id}/`,
 						{
 							...user,
 							lastForm: topThree,
@@ -128,7 +128,7 @@ export const FormPage = () => {
 	useEffect(() => {
 		async function fetchData() {
 			let { data } = await axios.get(
-				"https://five-to-fly.onrender.com/api/questions/"
+				"http://localhost:4000/api/questions/"
 			);
 			let questions = data.map((q, ind) => {
 				return {

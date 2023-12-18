@@ -11,7 +11,7 @@ export default function CreateQuestion() {
 		if (input.texto) {
 			setMessage("Guardando...");
 			return axios
-				.post("https://five-to-fly.onrender.com/api/questions/", {
+				.post("http://localhost:4000/api/questions/", {
 					texto: input.texto,
 				})
 				.then((res) => {

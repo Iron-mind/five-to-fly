@@ -6,14 +6,14 @@ export default function Questions() {
 
 	async function fetchData() {
 		let { data } = await axios.get(
-			"https://five-to-fly.onrender.com/api/questions/"
+			"http://localhost:4000/api/questions/"
 		);
 		setPreguntas(data || []);
 	}
 	useEffect(() => {
 		async function fetchData() {
 			let { data } = await axios.get(
-				"https://five-to-fly.onrender.com/api/questions/"
+				"http://localhost:4000/api/questions/"
 			);
 			setPreguntas(data || []);
 		}
@@ -21,7 +21,7 @@ export default function Questions() {
 	}, []);
 	function deleteQuestion(id) {
 		axios
-			.delete(`https://five-to-fly.onrender.com/api/questions/${id}`)
+			.delete(`http://localhost:4000/api/questions/${id}`)
 			.then(() => {
 				alert("Borrado");
 				fetchData();
