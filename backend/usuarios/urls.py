@@ -6,7 +6,7 @@ router = routers.DefaultRouter()
 #router.register(r'register',views.RegisterView,'register')
 #router.register(r'logout',views.LogoutView,'logout')
 router.register(r'userProfile',views.UserProfileViewSet,'userProfile')
-router.register(r'register',views.UserProfileViewSet,'register')
+router.register(r'register',views.RegisterViewSet,'register')
 
 router.register(r'questions',views.QuestionViewSet,'questions')
 router.register(r'places',views.PlacesViewSet,'places')

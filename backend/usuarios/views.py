@@ -17,6 +17,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     queryset =  UserProfile.objects.all()
     permission_classes = [permissions.AllowAny]
 
+    #Verificar que el usuario este en la base de datos
     def create(self, request, *args, **kwargs):
         # Método para el inicio de sesión
         data = request.data
@@ -118,6 +119,22 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 #         except Exception as e:
 #             logger.error(f'Error al guardar la información actualizada: {str(e)}')
 #             return Response({'error': 'Error al guardar la información actualizada'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+  
+
+class RegisterViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = UserProfileSerializer
+    queryset =  UserProfile.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        serializer = UserRegistrationSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            user.set_password(serializer.validated_data['password']) 
+            user.save()
+            token, created = Token.objects.get_or_create(user=user)
+            return Response({'token': token.key, 'user':serializer.data}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LogoutView(APIView):
    permission_classes = [permissions.IsAuthenticated]
@@ -125,6 +142,8 @@ class LogoutView(APIView):
    def post(self, request, format=None):
        request.user.auth_token.delete()
        return Response(status=status.HTTP_200_OK)
+   
+
    
 class QuestionViewSet(viewsets.ModelViewSet):
     serializer_class = QuestionsSerializer
