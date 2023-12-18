@@ -9,6 +9,8 @@ import {
 import { PrivateRoute } from './PrivateRoute';
 import { UserProfile } from "../pages/Profile";
 import { EvaluateResult } from "../pages/evaluateResult";
+import CreateQuestion from "../pages/createQuestion";
+import Questions from "../pages/questions";
 
 export const AppRouter = () => {
 	return (
@@ -24,8 +26,11 @@ export const AppRouter = () => {
 					element={
 						<PrivateRoute>
 							<UserProfile />
-						</PrivateRoute>}
+						</PrivateRoute>
+					}
 				/>
+				<Route path="create" element={<CreateQuestion />} />
+				<Route path="questions" element={<Questions />} />
 				<Route
 					path="form"
 					element={

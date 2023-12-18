@@ -22,7 +22,7 @@ export function EvaluateResult() {
 	const saveOpinion = async () => {
 		setStep(2);
 		const res = await axios
-			.put("http://localhost:4000/api/userProfile/" + `${user.id}/`, {
+			.put("https://five-to-fly.onrender.com/api/userProfile/" + `${user.id}/`, {
 				...user,
 				rate: rating
 			})
