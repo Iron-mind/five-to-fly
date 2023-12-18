@@ -34,7 +34,7 @@ export const RegisterPage = () => {
 		console.log(data)
 		try {
 			// Realiza la solicitud POST utilizando Axios
-			const res = await axios.post('https://five-to-fly.onrender.com/register/', data);
+			const res = await axios.post('https://five-to-fly.onrender.com/api/register/', data);
 			console.log('Respuesta del servidor:', res.data);
 			const userData = {
 				id: res.data.user.id,
