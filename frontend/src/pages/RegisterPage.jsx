@@ -65,7 +65,7 @@ export const RegisterPage = () => {
 				}
 			} else if (error.request) {
 				// La solicitud fue realizada pero no se recibió respuesta
-				toast.error('No se recibió respuesta del servidor. Inténtalo de nuevo más tarde.');
+				toast.error('No se recibió respuesta del servidor. Por favor, Inténtalo de nuevo más tarde.');
 			} else {
 				// Otro tipo de error
 				toast.error(`Error: ${error}`);
