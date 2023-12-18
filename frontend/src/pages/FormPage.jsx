@@ -28,8 +28,8 @@ export function compararLugaresTuristicos(respuesta, lugares) {
 
     // Ordenar los lugares por puntuación de mayor a menor
     const lugaresOrdenados = puntuaciones.sort((a, b) => b.score - a.score);
-    lugaresOrdenados.slice(0, 3)
-    return lugaresOrdenados
+    return lugaresOrdenados.slice(0, 5);
+     
 }
 
 //calculo las puntuaciones de cada lugar con sus respectivos pesos
@@ -107,10 +107,13 @@ export const FormPage = () => {
 			async function fetchData() {
 				setSubmitted(true);
 				const res = await axios
-					.put(`http://localhost:4000/api/userProfile/` + `${user.id}/`, {
-						...user,
-						lastForm: topThree,
-					})
+					.put(
+						`https://five-to-fly.onrender.com/api/userProfile/` + `${user.id}/`,
+						{
+							...user,
+							lastForm: topThree,
+						}
+					)
 					.then(() => {
 						login({
 							...user,
@@ -124,7 +127,9 @@ export const FormPage = () => {
 
 	useEffect(() => {
 		async function fetchData() {
-			let { data } = await axios.get("http://localhost:4000/api/questions/");
+			let { data } = await axios.get(
+				"https://five-to-fly.onrender.com/api/questions/"
+			);
 			let questions = data.map((q, ind) => {
 				return {
 					texto: q.texto,

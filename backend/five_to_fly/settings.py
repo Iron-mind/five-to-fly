@@ -134,6 +134,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://localhost:5432",
+    "https://five-to-fly.netlify.app"
 ]
 
 CORS_ALLOW_METHODS = (
@@ -154,14 +155,12 @@ CORS_ALLOW_HEADERS = (
     "x-requested-with",
 )
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://localhost:5432",
-]
-
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://localhost:5432",
 ]
 AUTH_USER_MODEL = 'usuarios.UserProfile'
 AUTH_GROUP_MODEL = 'usuarios.Role'
+
+ALLOWED_HOSTS = ['five-to-fly.onrender.com', 'localhost', '127.0.0.1','five-to-fly.netlify.app']
+
